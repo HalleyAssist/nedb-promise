@@ -4,7 +4,7 @@ var thenify = require('thenify')
 function fromInstance(nedbInstance) {
 	var newDB = { nedb: nedbInstance }
 
-	var methods = [ 'loadDatabase', 'insert', 'find', 'findOne', 'count', 'update', 'remove', 'ensureIndex', 'removeIndex' ]
+	var methods = [ 'loadDatabase', 'insert', 'find', 'findOne', 'count', 'update', 'remove', 'ensureIndex', 'removeIndex', 'close' ]
 	for (var i = 0; i < methods.length; ++i) {
 		var m = methods[i]
 		newDB[m] = thenify(nedbInstance[m].bind(nedbInstance))
