@@ -28,6 +28,18 @@ function fromInstance(nedbInstance) {
 		return cursor
 	}
 
+  // added by bslee
+  newDB.setAutocompactionInterval = function(interval) {
+    nedbInstance.persistence.setAutocompactionInterval(interval)
+  }
+
+  newDB.compact = function(cb) {
+    nedbInstance.persistence.compactDatafile()
+    if (typeof cb === 'function') {
+      nedbInstance.once('compaction.done', cb)
+    }
+  }
+
 	return newDB
 }
 
