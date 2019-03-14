@@ -14,8 +14,10 @@
   "author": "Jonathan Apodaca",
   "license": "ISC",
   "dependencies": {
-    "nedb": "^1.8.0",
     "thenify": "^3.2.0"
+  },
+  "peerDependencies": {
+    "nedb": "*"
   },
   "devDependencies": {
     "co": "^4.6.0",
