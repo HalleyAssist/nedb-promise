@@ -58,6 +58,14 @@ describe('datastore', () => {
 			let assertion = docs[0] == 3 && docs[1] == 2 && docs[2] == 1
 			assert(assertion)
 		}))
+
+		it('should sort(2)', async () => {
+			let docs = await (DB.find({}).sort({ num: -1 }))
+
+			assert(docs[0].num == 3)
+			assert(docs[1].num == 2)
+			assert(docs[2].num == 1)
+		})
 	})
 
 	describe('#findOne()', () => {

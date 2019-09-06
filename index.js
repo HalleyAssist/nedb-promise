@@ -8,7 +8,7 @@ class Finder {
 			const fn = cursor[k]
 			if(typeof fn === 'function'){
 				this[k] = (...args)=>{
-					return new Finder(fn.call(curor, ...args))
+					return new Finder(fn.call(cursor, ...args))
 				}
 			}
 		}
