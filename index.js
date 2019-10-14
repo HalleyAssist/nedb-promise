@@ -1,5 +1,5 @@
 var NedbDatastore = require('nedb'),
-	thenify = require('thenify')
+    util = require('util')
 
 class Finder {
 	constructor(cursor){
@@ -30,7 +30,7 @@ function fromInstance(nedbInstance) {
 	var methods = ['loadDatabase', 'insert', 'findOne', 'count', 'update', 'remove', 'ensureIndex', 'removeIndex']
 	for (var i = 0; i < methods.length; ++i) {
 		var m = methods[i]
-		newDB[m] = thenify(nedbInstance[m].bind(nedbInstance))
+		newDB[m] = util.promisify(nedbInstance[m].bind(nedbInstance))
 	}
 
 	newDB.find = function (...args) {
@@ -40,19 +40,19 @@ function fromInstance(nedbInstance) {
 
 	newDB.cfind = function (query, projections) {
 		var cursor = nedbInstance.find(query, projections)
-		cursor.exec = thenify(cursor.exec.bind(cursor))
+		cursor.exec = util.promisify(cursor.exec.bind(cursor))
 		return cursor
 	}
 
 	newDB.cfindOne = function (query, projections) {
 		var cursor = nedbInstance.findOne(query, projections)
-		cursor.exec = thenify(cursor.exec.bind(cursor))
+		cursor.exec = util.promisify(cursor.exec.bind(cursor))
 		return cursor
 	}
 
 	newDB.ccount = function (query) {
 		var cursor = nedbInstance.count(query)
-		cursor.exec = thenify(cursor.exec.bind(cursor))
+		cursor.exec = util.promisify(cursor.exec.bind(cursor))
 		return cursor
 	}
 
