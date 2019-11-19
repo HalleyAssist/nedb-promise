@@ -57,8 +57,8 @@ function fromInstance(nedbInstance) {
 	}
 
 	// added by bslee
-	newDB.setAutocompactionInterval = function (interval, minimumWritten) {
-		nedbInstance.persistence.setAutocompactionInterval(interval, minimumWritten)
+	newDB.setAutocompactionInterval = function (interval, minimumWritten, minimumBytes) {
+		nedbInstance.persistence.setAutocompactionInterval(interval, minimumWritten, minimumBytes)
 	}
 
 	newDB.compact = function (cb) {
