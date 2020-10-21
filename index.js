@@ -34,8 +34,10 @@ function fromInstance(nedbInstance) {
 	}
 
 	newDB.find = function (...args) {
-		const result = nedbInstance.find(...args)
-		return new Finder(result)
+		return new Finder(nedbInstance.find(...args))
+	}
+	newDB.findUnsafe = function (...args) {
+		return new Finder(nedbInstance.findUnsafe(...args))
 	}
 
 	newDB.cfind = function (query, projections) {
