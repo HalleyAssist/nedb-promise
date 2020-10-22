@@ -27,7 +27,7 @@ class Finder {
 function fromInstance(nedbInstance) {
 	var newDB = { nedb: nedbInstance }
 
-	var methods = ['loadDatabase', 'insert', 'findOne', 'count', 'update', 'remove', 'ensureIndex', 'removeIndex']
+	var methods = ['loadDatabase', 'insert', 'insertUnsafe', 'findOne', 'count', 'update', 'remove', 'ensureIndex', 'removeIndex']
 	for (var i = 0; i < methods.length; ++i) {
 		var m = methods[i]
 		newDB[m] = util.promisify(nedbInstance[m].bind(nedbInstance))
