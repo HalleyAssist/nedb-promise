@@ -70,6 +70,8 @@ function fromInstance(nedbInstance) {
 		}
 	}
 
+	this.datastore = nedbInstance
+
 	return newDB
 }
 
