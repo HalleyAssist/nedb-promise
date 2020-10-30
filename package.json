@@ -22,7 +22,7 @@
     "co": "^4.6.0",
     "istanbul": "^0.4.2",
     "lodash": "^4.5.1",
-    "nedb": "^1.8.0",
+    "nedb": "git+https://github.com/HalleyAssist/nedb.git",
     "mocha": "^3.2.0"
   },
   "repository": "jrop/nedb-promise"
