@@ -24,7 +24,7 @@ class Finder {
 	}
 }
 
-const Methods = ['loadDatabase', 'insert', 'insertUnsafe', 'insertUnsafest', 'findOne', 'count', 'update', 'remove', 'ensureIndex', 'removeIndex', 'cleanupExpired']
+const Methods = ['loadDatabase', 'insert', 'insertUnsafe', 'insertUnsafest', 'findOne', 'count', 'update', 'upsert', 'remove', 'ensureIndex', 'removeIndex', 'cleanupExpired']
 
 function fromInstance(nedbInstance) {
 	var newDB = { nedb: nedbInstance }
