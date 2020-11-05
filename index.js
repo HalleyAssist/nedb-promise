@@ -1,5 +1,5 @@
-var NedbDatastore = require('nedb'),
-    util = require('util')
+const NedbDatastore = require('nedb'),
+      util = require('util')
 
 class Finder {
 	constructor(cursor){
@@ -34,6 +34,9 @@ function fromInstance(nedbInstance) {
 	}
 
 	newDB.find = function (...args) {
+		if(args.length === 1 && args[0] instanceof NedbDatastore.Cursor){
+			return new Finder(args[0])
+		}
 		return new Finder(nedbInstance.find(...args))
 	}
 	newDB.findUnsafe = function (...args) {
