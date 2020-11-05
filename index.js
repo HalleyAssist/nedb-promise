@@ -24,12 +24,12 @@ class Finder {
 	}
 }
 
+const Methods = ['loadDatabase', 'insert', 'insertUnsafe', 'insertUnsafest', 'findOne', 'count', 'update', 'remove', 'ensureIndex', 'removeIndex', 'cleanupExpired']
+
 function fromInstance(nedbInstance) {
 	var newDB = { nedb: nedbInstance }
 
-	var methods = ['loadDatabase', 'insert', 'insertUnsafe', 'insertUnsafest', 'findOne', 'count', 'update', 'remove', 'ensureIndex', 'removeIndex']
-	for (var i = 0; i < methods.length; ++i) {
-		var m = methods[i]
+	for(const m of Methods){
 		newDB[m] = util.promisify(nedbInstance[m].bind(nedbInstance))
 	}
 
