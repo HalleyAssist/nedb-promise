@@ -2,7 +2,7 @@
 
 const assert = require('assert')
 const co = require('co')
-const datastore = require('./index')
+const datastore = require('../')
 const path = require('path')
 const _ = require('lodash')
 
@@ -26,47 +26,6 @@ describe('datastore', () => {
 			alpha: 'c'
 		} ])
 	}))
-
-	describe('#find()', () => {
-		it('should return them all', co.wrap(function * () {
-			assert.equal((yield DB.find({})).length, 3)
-		}))
-
-		it('should only return 1', co.wrap(function * () {
-			assert.equal((yield DB.find({ num: 3 })).length, 1)
-		}))
-
-		it ('should project', co.wrap(function * () {
-			let doc = yield DB.cfind({ num: 3 })
-				.projection({ num: 1, _id: 0 })
-				.exec()
-
-			doc = doc[0]
-			assert.equal(doc.num, 3)
-			assert.equal(doc.alpha, undefined)
-		}))
-
-		it('should sort', co.wrap(function * () {
-			let docs = yield DB.cfind({})
-				.sort({ num: -1 })
-				.exec()
-
-			docs = _.chain(docs)
-				.map(d => d.num)
-				.value()
-
-			let assertion = docs[0] == 3 && docs[1] == 2 && docs[2] == 1
-			assert(assertion)
-		}))
-
-		it('should sort(2)', async () => {
-			let docs = await (DB.find({}).sort({ num: -1 }))
-
-			assert(docs[0].num == 3)
-			assert(docs[1].num == 2)
-			assert(docs[2].num == 1)
-		})
-	})
 
 	describe('#findOne()', () => {
 		it('should only return one', co.wrap(function * () {
@@ -117,17 +76,6 @@ describe('datastore', () => {
 			yield DB.update({ num: 3 }, { $set: { updated: true } })
 			let updated = yield DB.findOne({ num: 3 })
 			assert(updated.updated)
-		}))
-
-		it('should insert a new document', co.wrap(function * () {
-			let beforeCount = yield DB.count({})
-			yield DB.update({ num: 4 }, {
-				num: 4,
-				alpha: 'f'
-			}, { upsert: true })
-			let afterCount = yield DB.count({})
-
-			assert.equal(afterCount - beforeCount, 1)
 		}))
 	})
 

@@ -1,4 +1,4 @@
-const NedbDatastore = require('nedb'),
+const NedbDatastore = require('./nedb/datastore'),
       util = require('util')
 
 class Finder {
@@ -86,5 +86,7 @@ function datastore(options) {
 // so that import { datastore } still works:
 datastore.datastore = datastore
 datastore.fromInstance = fromInstance
+datastore.Model = require('./nedb/model')
+datastore.Cursor = require('./nedb/cursor')
 
 module.exports = datastore
