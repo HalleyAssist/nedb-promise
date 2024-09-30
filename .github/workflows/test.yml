@@ -9,6 +9,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install modules
       run: |
-        yarn global add eslint
-        echo "::add-path::$(yarn global bin)"
-    - run: eslint index.js --ext .js,.jsx,.ts,.tsx
+        sudo npm install -g eslint@8
+    - run: eslint index.js nedb --ext .js,.jsx,.ts,.tsx
+    - run: npm install
+    - run: npm test
