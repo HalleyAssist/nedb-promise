@@ -1,5 +1,6 @@
 const NedbDatastore = require('./nedb/datastore'),
-      util = require('util')
+      util = require('util'),
+	  Cursor = require('./nedb/cursor')
 
 class Finder {
 	constructor(cursor){
@@ -34,7 +35,7 @@ function fromInstance(nedbInstance) {
 	}
 
 	newDB.find = function (...args) {
-		if(args.length === 1 && args[0] instanceof NedbDatastore.Cursor){
+		if(args.length === 1 && args[0] instanceof Cursor){
 			return new Finder(args[0])
 		}
 		return new Finder(nedbInstance.find(...args))
