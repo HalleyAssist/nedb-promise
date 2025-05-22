@@ -361,8 +361,8 @@ Datastore.prototype.getCandidates = function (query, dontExpireStaleDocs, callba
   if(query['$and']){
     var newQuery = {}
     var queryParts = query['$and']
-    for(var part of queryParts){
-      var key = Object.keys(part)[0]
+    for(let part of queryParts){
+      const key = Object.keys(part)[0]
       newQuery[key] = part[key]
     }
     query = newQuery
