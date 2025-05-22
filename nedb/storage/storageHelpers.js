@@ -7,7 +7,7 @@
  * It's essentially fs, mkdirp and crash safe write and read functions
  */
 
-var fs = require('fs')
+let fs = require('fs')
   , mkdirp = require('mkdirp')
   , [AsyncWaterfall, AsyncApply] = [require('async/waterfall'), require('async/apply')]
   , path = require('path')
@@ -42,7 +42,7 @@ storage.ensureFileDoesntExist = function (file, callback) {
  * If options is a string, it is assumed that the flush of the file (not dir) called options was requested
  */
 storage.flushToStorage = function (options, callback) {
-  var filename, flags;
+  let filename, flags;
   if (typeof options === 'string') {
     filename = options;
     flags = 'r+';
@@ -60,7 +60,7 @@ storage.flushToStorage = function (options, callback) {
     fs.fsync(fd, function (errFS) {
       fs.close(fd, function (errC) {
         if (errFS || errC) {
-          var e = new Error('Failed to flush to storage');
+          let e = new Error('Failed to flush to storage');
           e.errorOnFsync = errFS;
           e.errorOnClose = errC;
           return callback(e);
@@ -80,7 +80,7 @@ storage.flushToStorage = function (options, callback) {
  * @param {Function} cb Optional callback, signature: err
  */
 storage.crashSafeWriteFile = function (filename, data, cb) {
-  var callback = cb || function () {}
+  let callback = cb || function () {}
     , tempFilename = filename + '~';
 
   AsyncWaterfall([
@@ -106,7 +106,7 @@ storage.crashSafeWriteFile = function (filename, data, cb) {
 };
 
 storage.crashSafeRename = function (oldFilename, newFilename, cb) {
-  var callback = cb || function () {}
+  let callback = cb || function () {}
     , tempFilename = oldFilename;
 
    AsyncWaterfall([
@@ -125,7 +125,7 @@ storage.crashSafeRename = function (oldFilename, newFilename, cb) {
  * @param {Function} callback signature: err
  */
 storage.ensureDatafileIntegrity = function (filename, callback) {
-  var tempFilename = filename + '~';
+  let tempFilename = filename + '~';
 
   storage.exists(filename, function (filenameExists) {
     // Write was successful

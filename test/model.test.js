@@ -1,4 +1,4 @@
-var model = require('../nedb/model')
+let model = require('../nedb/model')
   , should = require('chai').should()
   , assert = require('chai').assert
   , expect = require('chai').expect
@@ -15,7 +15,7 @@ describe('Model', function () {
   describe('Serialization, deserialization', function () {
 
     it('Can serialize and deserialize strings', function () {
-      var a, b, c;
+      let a, b, c;
 
       a = { test: "Some string" };
       b = model.serialize(a);
@@ -35,7 +35,7 @@ describe('Model', function () {
     });
 
     it('Can serialize and deserialize booleans', function () {
-      var a, b, c;
+      let a, b, c;
 
       a = { test: true };
       b = model.serialize(a);
@@ -45,7 +45,7 @@ describe('Model', function () {
     });
 
     it('Can serialize and deserialize numbers', function () {
-      var a, b, c;
+      let a, b, c;
 
       a = { test: 5 };
       b = model.serialize(a);
@@ -55,7 +55,7 @@ describe('Model', function () {
     });
 
     it('Can serialize and deserialize null', function () {
-      var a, b, c;
+      let a, b, c;
 
       a = { test: null };
       b = model.serialize(a);
@@ -65,7 +65,7 @@ describe('Model', function () {
     });
 
     it('undefined fields are removed when serialized', function() {
-      var a = { bloup: undefined, hello: 'world' }
+      let a = { bloup: undefined, hello: 'world' }
         , b = model.serialize(a)
         , c = model.deserialize(b)
         ;
@@ -76,7 +76,7 @@ describe('Model', function () {
     });
 
     it('Can serialize and deserialize a date', function () {
-      var a, b, c
+      let a, b, c
         , d = new Date();
 
       a = { test: d };
@@ -89,7 +89,7 @@ describe('Model', function () {
     });
 
     it('Can serialize and deserialize sub objects', function () {
-      var a, b, c
+      let a, b, c
         , d = new Date();
 
       a = { test: { something: 39, also: d, yes: { again: 'yes' } } };
@@ -102,7 +102,7 @@ describe('Model', function () {
     });
 
     it('Can serialize and deserialize sub arrays', function () {
-      var a, b, c
+      let a, b, c
         , d = new Date();
 
       a = { test: [ 39, d, { again: 'yes' } ] };
@@ -115,7 +115,7 @@ describe('Model', function () {
     });
 
     it('Reject field names beginning with a $ sign or containing a dot, except the four edge cases', function () {
-      var a1 = { $something: 'totest' }
+      let a1 = { $something: 'totest' }
         , a2 = { "with.dot": 'totest' }
         , e1 = { $$date: 4321 }
         , e2 = { $$deleted: true }
@@ -135,7 +135,7 @@ describe('Model', function () {
     });
 
     it('Can serialize string fields with a new line without breaking the DB', function (done) {
-      var db1, db2
+      let db1, db2
         , badString = "world\r\nearth\nother\rline"
       ;
 
@@ -164,9 +164,9 @@ describe('Model', function () {
     });
 
     it('Can accept objects whose keys are numbers', function () {
-      var o = { 42: true };
+      let o = { 42: true };
 
-      var s = model.serialize(o);
+      let s = model.serialize(o);
     });
 
   });   // ==== End of 'Serialization, deserialization' ==== //
@@ -204,7 +204,7 @@ describe('Model', function () {
     });
 
     it('Properties with a null value dont trigger an error', function () {
-      var obj = { prop: null };
+      let obj = { prop: null };
 
       model.checkObject(obj);
     });
@@ -230,7 +230,7 @@ describe('Model', function () {
   describe('Deep copying', function () {
 
     it('Should be able to deep copy any serializable model', function () {
-      var d = new Date()
+      let d = new Date()
         , obj = { a: ['ee', 'ff', 42], date: d, subobj: { a: 'b', b: 'c' } }
         , res = model.deepCopy(obj);
         ;
@@ -258,7 +258,7 @@ describe('Model', function () {
     });
 
     it('Should deep copy the contents of an array', function () {
-      var a = [{ hello: 'world' }]
+      let a = [{ hello: 'world' }]
         , b = model.deepCopy(a)
       ;
 
@@ -269,7 +269,7 @@ describe('Model', function () {
     });
 
     it('Without the strictKeys option, everything gets deep copied', function () {
-      var a = { a: 4, $e: 'rrr', 'eee.rt': 42, nested: { yes: 1, 'tt.yy': 2, $nopenope: 3 }, array: [{ 'rr.hh': 1 }, { yes: true }, { $yes: false }] }
+      let a = { a: 4, $e: 'rrr', 'eee.rt': 42, nested: { yes: 1, 'tt.yy': 2, $nopenope: 3 }, array: [{ 'rr.hh': 1 }, { yes: true }, { $yes: false }] }
         , b = model.deepCopy(a)
       ;
 
@@ -277,7 +277,7 @@ describe('Model', function () {
     });
 
     it('With the strictKeys option, only valid keys gets deep copied', function () {
-      var a = { a: 4, $e: 'rrr', 'eee.rt': 42, nested: { yes: 1, 'tt.yy': 2, $nopenope: 3 }, array: [{ 'rr.hh': 1 }, { yes: true }, { $yes: false }] }
+      let a = { a: 4, $e: 'rrr', 'eee.rt': 42, nested: { yes: 1, 'tt.yy': 2, $nopenope: 3 }, array: [{ 'rr.hh': 1 }, { yes: true }, { $yes: false }] }
         , b = model.deepCopyStrictKeys(a)
       ;
 
@@ -285,7 +285,7 @@ describe('Model', function () {
     });;
 
     it('With the strictKeys option, $fn should not be copied', function () {
-      var a = { $fn: function(){} }
+      let a = { $fn: function(){} }
         , b = model.deepCopyStrictKeys(a)
       ;
 
@@ -298,7 +298,7 @@ describe('Model', function () {
   describe('Modifying documents', function () {
 
     it('Queries not containing any modifier just replace the document by the contents of the query but keep its _id', function () {
-      var obj = { some: 'thing', _id: 'keepit' }
+      let obj = { some: 'thing', _id: 'keepit' }
         , updateQuery = { replace: 'done', bloup: [ 1, 8] }
         , t
         ;
@@ -314,7 +314,7 @@ describe('Model', function () {
     });
 
     it('Throw an error if trying to change the _id field in a copy-type modification', function () {
-      var obj = { some: 'thing', _id: 'keepit' }
+      let obj = { some: 'thing', _id: 'keepit' }
         , updateQuery = { replace: 'done', bloup: [ 1, 8], _id: 'donttryit' }
         ;
 
@@ -327,7 +327,7 @@ describe('Model', function () {
     });
 
     it('Throw an error if trying to use modify in a mixed copy+modify way', function () {
-      var obj = { some: 'thing' }
+      let obj = { some: 'thing' }
         , updateQuery = { replace: 'me', $modify: 'metoo' };
 
       expect(function () {
@@ -336,7 +336,7 @@ describe('Model', function () {
     });
 
     it('Throw an error if trying to use an inexistent modifier', function () {
-      var obj = { some: 'thing' }
+      let obj = { some: 'thing' }
         , updateQuery = { $set: { it: 'exists' }, $modify: 'not this one' };
 
       expect(function () {
@@ -345,7 +345,7 @@ describe('Model', function () {
     });
 
     it('Throw an error if a modifier is used with a non-object argument', function () {
-      var obj = { some: 'thing' }
+      let obj = { some: 'thing' }
         , updateQuery = { $set: 'this exists' };
 
       expect(function () {
@@ -355,7 +355,7 @@ describe('Model', function () {
 
     describe('$set modifier', function () {
       it('Can change already set fields without modfifying the underlying object', function () {
-        var obj = { some: 'thing', yup: 'yes', nay: 'noes' }
+        let obj = { some: 'thing', yup: 'yes', nay: 'noes' }
           , updateQuery = { $set: { some: 'changed', nay: 'yes indeed' } }
           , modified = model.modify(obj, updateQuery);
 
@@ -371,7 +371,7 @@ describe('Model', function () {
       });
 
       it('Creates fields to set if they dont exist yet', function () {
-        var obj = { yup: 'yes' }
+        let obj = { yup: 'yes' }
           , updateQuery = { $set: { some: 'changed', nay: 'yes indeed' } }
           , modified = model.modify(obj, updateQuery);
 
@@ -382,7 +382,7 @@ describe('Model', function () {
       });
 
       it('Can set sub-fields and create them if necessary', function () {
-        var obj = { yup: { subfield: 'bloup' } }
+        let obj = { yup: { subfield: 'bloup' } }
           , updateQuery = { $set: { "yup.subfield": 'changed', "yup.yop": 'yes indeed', "totally.doesnt.exist": 'now it does' } }
           , modified = model.modify(obj, updateQuery);
 
@@ -390,7 +390,7 @@ describe('Model', function () {
       });
 
       it("Doesn't replace a falsy field by an object when recursively following dot notation", function () {
-        var obj = { nested: false }
+        let obj = { nested: false }
           , updateQuery = { $set: { "nested.now": 'it is' } }
           , modified = model.modify(obj, updateQuery);
 
@@ -401,7 +401,7 @@ describe('Model', function () {
     describe('$unset modifier', function () {
 
       it('Can delete a field, not throwing an error if the field doesnt exist', function () {
-        var obj, updateQuery, modified;
+        let obj, updateQuery, modified;
 
         obj = { yup: 'yes', other: 'also' }
         updateQuery = { $unset: { yup: true } }
@@ -420,7 +420,7 @@ describe('Model', function () {
       });
 
       it('Can unset sub-fields and entire nested documents', function () {
-        var obj, updateQuery, modified;
+        let obj, updateQuery, modified;
 
         obj = { yup: 'yes', nested: { a: 'also', b: 'yeah' } }
         updateQuery = { $unset: { nested: true } }
@@ -439,7 +439,7 @@ describe('Model', function () {
       });
 
       it("When unsetting nested fields, should not create an empty parent to nested field", function () {
-        var obj = model.modify({ argh: true }, { $unset: { 'bad.worse': true } });
+        let obj = model.modify({ argh: true }, { $unset: { 'bad.worse': true } });
         assert.deepEqual(obj, { argh: true });
 
         obj = model.modify({ argh: true, bad: { worse: 'oh' } }, { $unset: { 'bad.worse': true } });
@@ -454,20 +454,20 @@ describe('Model', function () {
     describe('$inc modifier', function () {
       it('Throw an error if you try to use it with a non-number or on a non number field', function () {
         (function () {
-          var obj = { some: 'thing', yup: 'yes', nay: 2 }
+          let obj = { some: 'thing', yup: 'yes', nay: 2 }
             , updateQuery = { $inc: { nay: 'notanumber' } }
             , modified = model.modify(obj, updateQuery);
         }).should.throw();
 
         (function () {
-          var obj = { some: 'thing', yup: 'yes', nay: 'nope' }
+          let obj = { some: 'thing', yup: 'yes', nay: 'nope' }
             , updateQuery = { $inc: { nay: 1 } }
             , modified = model.modify(obj, updateQuery);
         }).should.throw();
       });
 
       it('Can increment number fields or create and initialize them if needed', function () {
-        var obj = { some: 'thing', nay: 40 }
+        let obj = { some: 'thing', nay: 40 }
           , modified;
 
         modified = model.modify(obj, { $inc: { nay: 2 } });
@@ -479,7 +479,7 @@ describe('Model', function () {
       });
 
       it('Works recursively', function () {
-        var obj = { some: 'thing', nay: { nope: 40 } }
+        let obj = { some: 'thing', nay: { nope: 40 } }
           , modified;
 
         modified = model.modify(obj, { $inc: { "nay.nope": -2, "blip.blop": 123 } });
@@ -490,7 +490,7 @@ describe('Model', function () {
     describe('$push modifier', function () {
 
       it('Can push an element to the end of an array', function () {
-        var obj = { arr: ['hello'] }
+        let obj = { arr: ['hello'] }
           , modified;
 
         modified = model.modify(obj, { $push: { arr: 'world' } });
@@ -498,7 +498,7 @@ describe('Model', function () {
       });
 
       it('Can push an element to a non-existent field and will create the array', function () {
-        var obj = {}
+        let obj = {}
           , modified;
 
         modified = model.modify(obj, { $push: { arr: 'world' } });
@@ -506,7 +506,7 @@ describe('Model', function () {
       });
 
       it('Can push on nested fields', function () {
-        var obj = { arr: { nested: ['hello'] } }
+        let obj = { arr: { nested: ['hello'] } }
           , modified;
 
         modified = model.modify(obj, { $push: { "arr.nested": 'world' } });
@@ -518,7 +518,7 @@ describe('Model', function () {
       });
 
       it('Throw if we try to push to a non-array', function () {
-        var obj = { arr: 'hello' }
+        let obj = { arr: 'hello' }
           , modified;
 
         (function () {
@@ -532,7 +532,7 @@ describe('Model', function () {
       });
 
       it('Can use the $each modifier to add multiple values to an array at once', function () {
-        var obj = { arr: ['hello'] }
+        let obj = { arr: ['hello'] }
           , modified;
 
         modified = model.modify(obj, { $push: { arr: { $each: ['world', 'earth', 'everything'] } } });
@@ -548,7 +548,7 @@ describe('Model', function () {
       });
 
       it('Can use the $slice modifier to limit the number of array elements', function () {
-        var obj = { arr: ['hello'] }
+        let obj = { arr: ['hello'] }
           , modified;
 
         modified = model.modify(obj, { $push: { arr: { $each: ['world', 'earth', 'everything'], $slice: 1 } } });
@@ -593,7 +593,7 @@ describe('Model', function () {
     describe('$addToSet modifier', function () {
 
       it('Can add an element to a set', function () {
-        var obj = { arr: ['hello'] }
+        let obj = { arr: ['hello'] }
           , modified;
 
         modified = model.modify(obj, { $addToSet: { arr: 'world' } });
@@ -605,7 +605,7 @@ describe('Model', function () {
       });
 
       it('Can add an element to a non-existent set and will create the array', function () {
-        var obj = { arr: [] }
+        let obj = { arr: [] }
           , modified;
 
         modified = model.modify(obj, { $addToSet: { arr: 'world' } });
@@ -613,7 +613,7 @@ describe('Model', function () {
       });
 
       it('Throw if we try to addToSet to a non-array', function () {
-        var obj = { arr: 'hello' }
+        let obj = { arr: 'hello' }
           , modified;
 
         (function () {
@@ -622,7 +622,7 @@ describe('Model', function () {
       });
 
       it('Use deep-equality to check whether we can add a value to a set', function () {
-        var obj = { arr: [ { b: 2 } ] }
+        let obj = { arr: [ { b: 2 } ] }
           , modified;
 
         modified = model.modify(obj, { $addToSet: { arr: { b: 3 } } });
@@ -634,7 +634,7 @@ describe('Model', function () {
       });
 
       it('Can use the $each modifier to add multiple values to a set at once', function () {
-        var obj = { arr: ['hello'] }
+        let obj = { arr: ['hello'] }
           , modified;
 
         modified = model.modify(obj, { $addToSet: { arr: { $each: ['world', 'earth', 'hello', 'earth'] } } });
@@ -654,7 +654,7 @@ describe('Model', function () {
     describe('$pop modifier', function () {
 
       it('Throw if called on a non array, a non defined field or a non integer', function () {
-        var obj = { arr: 'hello' }
+        let obj = { arr: 'hello' }
           , modified;
 
         (function () {
@@ -673,7 +673,7 @@ describe('Model', function () {
       });
 
       it('Can remove the first and last element of an array', function () {
-        var obj
+        let obj
           , modified;
 
         obj = { arr: [1, 4, 8] };
@@ -697,7 +697,7 @@ describe('Model', function () {
     describe('$pull modifier', function () {
 
       it('Can remove an element from a set', function () {
-        var obj = { arr: ['hello', 'world'] }
+        let obj = { arr: ['hello', 'world'] }
           , modified;
 
         modified = model.modify(obj, { $pull: { arr: 'world' } });
@@ -709,7 +709,7 @@ describe('Model', function () {
       });
 
       it('Can remove multiple matching elements', function () {
-        var obj = { arr: ['hello', 'world', 'hello', 'world'] }
+        let obj = { arr: ['hello', 'world', 'hello', 'world'] }
           , modified;
 
         modified = model.modify(obj, { $pull: { arr: 'world' } });
@@ -717,7 +717,7 @@ describe('Model', function () {
       });
 
       it('Throw if we try to pull from a non-array', function () {
-        var obj = { arr: 'hello' }
+        let obj = { arr: 'hello' }
           , modified;
 
         (function () {
@@ -726,7 +726,7 @@ describe('Model', function () {
       });
 
       it('Use deep-equality to check whether we can remove a value from a set', function () {
-        var obj = { arr: [{ b: 2 }, { b: 3 }] }
+        let obj = { arr: [{ b: 2 }, { b: 3 }] }
           , modified;
 
         modified = model.modify(obj, { $pull: { arr: { b: 3 } } });
@@ -738,7 +738,7 @@ describe('Model', function () {
       });
 
       it('Can use any kind of nedb query with $pull', function () {
-        var obj = { arr: [4, 7, 12, 2], other: 'yup' }
+        let obj = { arr: [4, 7, 12, 2], other: 'yup' }
           , modified
         ;
 
@@ -754,7 +754,7 @@ describe('Model', function () {
 
     describe('$max modifier', function () {
       it('Will set the field to the updated value if value is greater than current one, without modifying the original object', function () {
-        var obj = { some:'thing', number: 10 }
+        let obj = { some:'thing', number: 10 }
             , updateQuery = { $max: { number:12 } }
             , modified = model.modify(obj, updateQuery);
 
@@ -763,7 +763,7 @@ describe('Model', function () {
       });
 
       it('Will not update the field if new value is smaller than current one', function () {
-        var obj = { some:'thing', number: 10 }
+        let obj = { some:'thing', number: 10 }
             , updateQuery = { $max: { number: 9 } }
             , modified = model.modify(obj, updateQuery);
 
@@ -771,7 +771,7 @@ describe('Model', function () {
       });
 
       it('Will create the field if it does not exist', function () {
-        var obj = { some: 'thing' }
+        let obj = { some: 'thing' }
             , updateQuery = { $max: { number: 10 } }
             , modified = model.modify(obj, updateQuery);
 
@@ -779,7 +779,7 @@ describe('Model', function () {
       });
 
       it('Works on embedded documents', function () {
-        var obj = { some: 'thing', somethingElse: { number:10 } }
+        let obj = { some: 'thing', somethingElse: { number:10 } }
             , updateQuery = { $max: { 'somethingElse.number': 12 } }
             , modified = model.modify(obj,updateQuery);
 
@@ -789,7 +789,7 @@ describe('Model', function () {
 
     describe('$min modifier', function () {
       it('Will set the field to the updated value if value is smaller than current one, without modifying the original object', function () {
-        var obj = { some:'thing', number: 10 }
+        let obj = { some:'thing', number: 10 }
             , updateQuery = { $min: { number: 8 } }
             , modified = model.modify(obj, updateQuery);
 
@@ -798,7 +798,7 @@ describe('Model', function () {
       });
 
       it('Will not update the field if new value is greater than current one', function () {
-        var obj = { some: 'thing', number: 10 }
+        let obj = { some: 'thing', number: 10 }
             , updateQuery = { $min: { number: 12 } }
             , modified = model.modify(obj, updateQuery);
 
@@ -806,7 +806,7 @@ describe('Model', function () {
       });
 
       it('Will create the field if it does not exist', function () {
-        var obj = { some: 'thing' }
+        let obj = { some: 'thing' }
             , updateQuery = { $min: { number: 10 } }
             , modified = model.modify(obj, updateQuery);
 
@@ -814,7 +814,7 @@ describe('Model', function () {
       });
 
       it('Works on embedded documents', function () {
-        var obj = { some: 'thing', somethingElse: { number: 10 } }
+        let obj = { some: 'thing', somethingElse: { number: 10 } }
             , updateQuery = { $min: { 'somethingElse.number': 8 } }
             , modified = model.modify(obj, updateQuery);
 
@@ -828,7 +828,7 @@ describe('Model', function () {
   describe('Comparing things', function () {
 
     it('undefined is the smallest', function () {
-      var otherStuff = [null, "string", "", -1, 0, 5.3, 12, true, false, new Date(12345), {}, { hello: 'world' }, [], ['quite', 5]];
+      let otherStuff = [null, "string", "", -1, 0, 5.3, 12, true, false, new Date(12345), {}, { hello: 'world' }, [], ['quite', 5]];
 
       model.compareThings(undefined, undefined).should.equal(0);
 
@@ -839,7 +839,7 @@ describe('Model', function () {
     });
 
     it('Then null', function () {
-      var otherStuff = ["string", "", -1, 0, 5.3, 12, true, false, new Date(12345), {}, { hello: 'world' }, [], ['quite', 5]];
+      let otherStuff = ["string", "", -1, 0, 5.3, 12, true, false, new Date(12345), {}, { hello: 'world' }, [], ['quite', 5]];
 
       model.compareThings(null, null).should.equal(0);
 
@@ -850,7 +850,7 @@ describe('Model', function () {
     });
 
     it('Then numbers', function () {
-      var otherStuff = ["string", "", true, false, new Date(4312), {}, { hello: 'world' }, [], ['quite', 5]]
+      let otherStuff = ["string", "", true, false, new Date(4312), {}, { hello: 'world' }, [], ['quite', 5]]
         , numbers = [-12, 0, 12, 5.7];
 
       model.compareThings(-12, 0).should.equal(-1);
@@ -870,7 +870,7 @@ describe('Model', function () {
     });
 
     it('Then strings', function () {
-      var otherStuff = [true, false, new Date(4321), {}, { hello: 'world' }, [], ['quite', 5]]
+      let otherStuff = [true, false, new Date(4321), {}, { hello: 'world' }, [], ['quite', 5]]
         , strings = ['', 'string', 'hello world'];
 
       model.compareThings('', 'hey').should.equal(-1);
@@ -887,7 +887,7 @@ describe('Model', function () {
     });
 
     it('Then booleans', function () {
-      var otherStuff = [new Date(4321), {}, { hello: 'world' }, [], ['quite', 5]]
+      let otherStuff = [new Date(4321), {}, { hello: 'world' }, [], ['quite', 5]]
         , bools = [true, false];
 
       model.compareThings(true, true).should.equal(0);
@@ -904,7 +904,7 @@ describe('Model', function () {
     });
 
     it('Then dates', function () {
-      var otherStuff = [{}, { hello: 'world' }, [], ['quite', 5]]
+      let otherStuff = [{}, { hello: 'world' }, [], ['quite', 5]]
         , dates = [new Date(-123), new Date(), new Date(5555), new Date(0)]
         , now = new Date();
 
@@ -923,7 +923,7 @@ describe('Model', function () {
     });
 
     it('Then arrays', function () {
-      var otherStuff = [{}, { hello: 'world' }]
+      let otherStuff = [{}, { hello: 'world' }]
         , arrays = [[], ['yes'], ['hello', 5]]
         ;
 
@@ -964,7 +964,7 @@ describe('Model', function () {
     describe('Comparing things', function () {
 
       it('Two things of different types cannot be equal, two identical native things are equal', function () {
-        var toTest = [null, 'somestring', 42, true, new Date(72998322), { hello: 'world' }]
+        let toTest = [null, 'somestring', 42, true, new Date(72998322), { hello: 'world' }]
           , toTestAgainst = [null, 'somestring', 42, true, new Date(72998322), { hello: 'world' }]   // Use another array so that we don't test pointer equality
           , i, j
           ;
@@ -977,7 +977,7 @@ describe('Model', function () {
       });
 
       it('Can test native types null undefined string number boolean date equality', function () {
-        var toTest = [null, undefined, 'somestring', 42, true, new Date(72998322), { hello: 'world' }]
+        let toTest = [null, undefined, 'somestring', 42, true, new Date(72998322), { hello: 'world' }]
           , toTestAgainst = [undefined, null, 'someotherstring', 5, false, new Date(111111), { hello: 'mars' }]
           , i
           ;
@@ -988,7 +988,7 @@ describe('Model', function () {
       });
 
       it('If one side is an array or undefined, comparison fails', function () {
-        var toTestAgainst = [null, undefined, 'somestring', 42, true, new Date(72998322), { hello: 'world' }]
+        let toTestAgainst = [null, undefined, 'somestring', 42, true, new Date(72998322), { hello: 'world' }]
           , i
           ;
 
@@ -1024,7 +1024,7 @@ describe('Model', function () {
       });
       
       it("Can navigate inside arrays with dot notation, and return the array of values in that case", function () {
-        var dv;
+        let dv;
         
         // Simple array of subdocuments
         dv = model.getDotValue({ planets: [ { name: 'Earth', number: 3 }, { name: 'Mars', number: 2 }, { name: 'Pluton', number: 9 } ] }, 'planets.name');
@@ -1041,7 +1041,7 @@ describe('Model', function () {
       });
       
       it("Can get a single value out of an array using its index", function () {
-        var dv;
+        let dv;
         
         // Simple index in dot notation
         dv = model.getDotValue({ planets: [ { name: 'Earth', number: 3 }, { name: 'Mars', number: 2 }, { name: 'Pluton', number: 9 } ] }, 'planets.1');
@@ -1103,7 +1103,7 @@ describe('Model', function () {
     describe('Prepared match matching', function () {
 
       it('Matching a prepared query', function () {
-        var d = new Date()
+        let d = new Date()
 
         function prep(w){
           const ret = {$prepared: model.prepare(w)}
@@ -1118,7 +1118,7 @@ describe('Model', function () {
         */
       });
       it('Matching a prepared generic prepared query', function () {
-        var d = new Date()
+        let d = new Date()
 
         const p = model.prepare({ test: /true/ }, false)
 
@@ -1139,7 +1139,7 @@ describe('Model', function () {
     describe('Regular expression matching', function () {
 
       it('Matching a non-string to a regular expression always yields false', function () {
-        var d = new Date()
+        let d = new Date()
           , r = new RegExp(d.getTime());
 
         model.match({ test: true }, { test: /true/ }).should.equal(false);
@@ -1433,7 +1433,7 @@ describe('Model', function () {
       });
       
       it('Should be able to do the complex matching it must be used for', function () {
-        var checkEmail = function() {
+        let checkEmail = function() {
           if (!this.firstName || !this.lastName) { return false; }
           return this.firstName.toLowerCase() + "." + this.lastName.toLowerCase() + "@gmail.com" === this.email;
         };

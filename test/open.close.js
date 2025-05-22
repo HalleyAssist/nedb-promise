@@ -1,13 +1,13 @@
-var should = require('chai').should()
+let should = require('chai').should()
   , assert = require('chai').assert
   , [AsyncWaterfall, AsyncApply] = [require('async/waterfall'), require('async/apply')]
   , Datastore = require('../nedb/datastore');
 
-var closeDb = 'workspace/close.db';
+let closeDb = 'workspace/close.db';
 
 describe('Database', function () {
   it('Can open and close cleanly', function(done) {
-    var db = new Datastore({filename: closeDb, autoload: true}, function() { });
+    let db = new Datastore({filename: closeDb, autoload: true}, function() { });
     db.filename.should.equal(closeDb);
     
     db.inMemoryOnly.should.equal(false);
@@ -31,7 +31,7 @@ describe('Database', function () {
   });
   
   it('Can reopen a closed database', function(done) {
-    var db = new Datastore({filename: closeDb, autoload: true}, function() { });
+    let db = new Datastore({filename: closeDb, autoload: true}, function() { });
     db.find({}, function(err, docs) {
       assert.isNull(err, 'There were no errors');
       assert.isNotNull(docs, 'A result was returned');
@@ -45,16 +45,16 @@ describe('Database', function () {
   });
   
   it('Can open multiple databases, and then close them again', function(done) {
-    var multiOne = new Datastore({filename: 'workspace/multiOne.db', autoload: true}, function() {});
-    var multiTwo = new Datastore({filename: 'workspace/multiTwo.db', autoload: true}, function() {});
-    var multiThree = new Datastore({filename: 'workspace/multiThree.db', autoload: true}, function() {});
-    var multiFour = new Datastore({filename: 'workspace/multiFour.db', autoload: true}, function() {});
-    var multiFive = new Datastore({filename: 'workspace/multiFive.db', autoload: true}, function() {});
-    var multiSix = new Datastore({filename: 'workspace/multiSix.db', autoload: true}, function() {});
-    var multiSeven = new Datastore({filename: 'workspace/multiSeven.db', autoload: true}, function() {});
-    var multiEight = new Datastore({filename: 'workspace/multiEight.db', autoload: true}, function() {});
-    var multiNine = new Datastore({filename: 'workspace/multiNine.db', autoload: true}, function() {});
-    var multiTen = new Datastore({filename: 'workspace/multiTen.db', autoload: true}, function() {});
+    let multiOne = new Datastore({filename: 'workspace/multiOne.db', autoload: true}, function() {});
+    let multiTwo = new Datastore({filename: 'workspace/multiTwo.db', autoload: true}, function() {});
+    let multiThree = new Datastore({filename: 'workspace/multiThree.db', autoload: true}, function() {});
+    let multiFour = new Datastore({filename: 'workspace/multiFour.db', autoload: true}, function() {});
+    let multiFive = new Datastore({filename: 'workspace/multiFive.db', autoload: true}, function() {});
+    let multiSix = new Datastore({filename: 'workspace/multiSix.db', autoload: true}, function() {});
+    let multiSeven = new Datastore({filename: 'workspace/multiSeven.db', autoload: true}, function() {});
+    let multiEight = new Datastore({filename: 'workspace/multiEight.db', autoload: true}, function() {});
+    let multiNine = new Datastore({filename: 'workspace/multiNine.db', autoload: true}, function() {});
+    let multiTen = new Datastore({filename: 'workspace/multiTen.db', autoload: true}, function() {});
     
     multiOne.closeDatabase(function(err) {});
     multiTwo.closeDatabase(function(err) {});

@@ -1,4 +1,4 @@
-var crypto = require('crypto')
+let crypto = require('crypto')
   ;
 
 /**

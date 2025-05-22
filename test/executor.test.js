@@ -1,4 +1,4 @@
-var should = require('chai').should()
+let should = require('chai').should()
   , assert = require('chai').assert
   , testDb = 'workspace/test.db'
   , fs = require('fs')
@@ -13,7 +13,7 @@ var should = require('chai').should()
 // Test that even if a callback throws an exception, the next DB operations will still be executed
 // We prevent Mocha from catching the exception we throw on purpose by remembering all current handlers, remove them and register them back after test ends
 function testThrowInCallback (d, done) {
-  var currentUncaughtExceptionHandlers = process.listeners('uncaughtException');
+  let currentUncaughtExceptionHandlers = process.listeners('uncaughtException');
 
   process.removeAllListeners('uncaughtException');
 
@@ -26,7 +26,7 @@ function testThrowInCallback (d, done) {
       d.insert({ bar: 1 }, function (err) {
         process.removeAllListeners('uncaughtException');
         setImmediate(function(){
-          for (var i = 0; i < currentUncaughtExceptionHandlers.length; i ++) {
+          for (let i = 0; i < currentUncaughtExceptionHandlers.length; i ++) {
             process.on('uncaughtException', currentUncaughtExceptionHandlers[i]);
           }
   
@@ -62,7 +62,7 @@ function testFalsyCallback (d, done) {
 // Test that operations are executed in the right order
 // We prevent Mocha from catching the exception we throw on purpose by remembering all current handlers, remove them and register them back after test ends
 function testRightOrder (d, done) {
-  var currentUncaughtExceptionHandlers = process.listeners('uncaughtException');
+  let currentUncaughtExceptionHandlers = process.listeners('uncaughtException');
 
   process.removeAllListeners('uncaughtException');
 
@@ -84,7 +84,7 @@ function testRightOrder (d, done) {
                 docs[0].a.should.equal(3);
 
                 process.removeAllListeners('uncaughtException');
-                for (var i = 0; i < currentUncaughtExceptionHandlers.length; i ++) {
+                for (let i = 0; i < currentUncaughtExceptionHandlers.length; i ++) {
                   process.on('uncaughtException', currentUncaughtExceptionHandlers[i]);
                 }
 
@@ -104,9 +104,9 @@ function testRightOrder (d, done) {
 // is meant to address the deprecation warning:
 // (node) warning: Recursive process.nextTick detected. This will break in the next version of node. Please use setImmediate for recursive deferral.
 // see
-var testEventLoopStarvation = function(d, done){
-   var times = 1001;
-   var i = 0;
+let testEventLoopStarvation = function(d, done){
+   let times = 1001;
+   let i = 0;
    while ( i <times) {
       i++;
      d.find({"bogus": "search"}, function (err, docs) {
@@ -129,7 +129,7 @@ function testExecutorWorksWithoutCallback (d, done) {
 describe('Executor', function () {
 
   describe('With persistent database', function () {
-    var d;
+    let d;
 
     beforeEach(function (done) {
       d = new Datastore({ filename: testDb });
@@ -180,7 +180,7 @@ describe('Executor', function () {
 
 
   describe('With non persistent database', function () {
-    var d;
+    let d;
 
     beforeEach(function (done) {
       d = new Datastore({ inMemoryOnly: true });

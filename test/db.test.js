@@ -1,4 +1,4 @@
-var should = require('chai').should()
+let should = require('chai').should()
   , assert = require('chai').assert
   , testDb = 'workspace/test.db'
   , fs = require('fs')
@@ -13,7 +13,7 @@ var should = require('chai').should()
 
 
 describe('Database', function () {
-  var d;
+  let d;
 
   beforeEach(function (done) {
     d = new Datastore({ filename: testDb });
@@ -41,8 +41,8 @@ describe('Database', function () {
   });
 
   it('Can open and close cleanly', function() {
-    var closeDb = 'workspace/close.db';
-    var db = new Datastore({filename: closeDb, autoload: true}, function() {
+    let closeDb = 'workspace/close.db';
+    let db = new Datastore({filename: closeDb, autoload: true}, function() {
       db.closeDatabase();
     });
     db.filename.should.equal(closeDb);
@@ -50,15 +50,15 @@ describe('Database', function () {
   });
   
   it('Constructor compatibility with v0.6-', function () {
-    var dbef = new Datastore('somefile');
+    let dbef = new Datastore('somefile');
     dbef.filename.should.equal('somefile');
     dbef.inMemoryOnly.should.equal(false);
 
-    var dbef = new Datastore('');
+    let dbef = new Datastore('');
     assert.isNull(dbef.filename);
     dbef.inMemoryOnly.should.equal(true);
 
-    var dbef = new Datastore();
+    let dbef = new Datastore();
     assert.isNull(dbef.filename);
     dbef.inMemoryOnly.should.equal(true);
   });
@@ -66,7 +66,7 @@ describe('Database', function () {
   describe('Autoloading', function () {
 
     it('Can autoload a database and query it right away', function (done) {
-      var fileStr = model.serialize({ _id: '1', a: 5, planet: 'Earth' }) + '\n' + model.serialize({ _id: '2', a: 5, planet: 'Mars' }) + '\n'
+      let fileStr = model.serialize({ _id: '1', a: 5, planet: 'Earth' }) + '\n' + model.serialize({ _id: '2', a: 5, planet: 'Mars' }) + '\n'
         , autoDb = 'workspace/auto.db'
         , db
         ;
@@ -82,7 +82,7 @@ describe('Database', function () {
     });
 
     it('Throws if autoload fails', function (done) {
-      var fileStr = model.serialize({ _id: '1', a: 5, planet: 'Earth' }) + '\n' + model.serialize({ _id: '2', a: 5, planet: 'Mars' }) + '\n' + '{"$$indexCreated":{"fieldName":"a","unique":true}}'
+      let fileStr = model.serialize({ _id: '1', a: 5, planet: 'Earth' }) + '\n' + model.serialize({ _id: '2', a: 5, planet: 'Mars' }) + '\n' + '{"$$indexCreated":{"fieldName":"a","unique":true}}'
         , autoDb = 'workspace/auto.db'
         , db
         ;
@@ -157,7 +157,7 @@ describe('Database', function () {
     });
 
     it('Can insert and get back from DB complex objects with all primitive and secondary types', function (done) {
-      var da = new Date()
+      let da = new Date()
         , obj = { a: ['ee', 'ff', 42], date: da, subobj: { a: 'b', b: 'c' } }
         ;
 
@@ -237,11 +237,11 @@ describe('Database', function () {
     });
 
     it('Can insert an array of documents at once', function (done) {
-      var docs = [{ a: 5, b: 'hello' }, { a: 42, b: 'world' }];
+      let docs = [{ a: 5, b: 'hello' }, { a: 42, b: 'world' }];
 
       d.insert(docs, function (err) {
         d.find({}, function (err, docs) {
-          var data;
+          let data;
 
           docs.length.should.equal(2);
           _.find(docs, function (doc) { return doc.a === 5; }).b.should.equal('hello');
@@ -261,7 +261,7 @@ describe('Database', function () {
     });
 
     it('If a bulk insert violates a constraint, all changes are rolled back', function (done) {
-      var docs = [{ a: 5, b: 'hello' }, { a: 42, b: 'world' }, { a: 5, b: 'bloup' }, { a: 7 }];
+      let docs = [{ a: 5, b: 'hello' }, { a: 42, b: 'world' }, { a: 5, b: 'bloup' }, { a: 7 }];
 
       d.ensureIndex({ fieldName: 'a', unique: true }, function () {   // Important to specify callback here to make sure filesystem synced
         d.insert(docs, function (err) {
@@ -269,7 +269,7 @@ describe('Database', function () {
 
           d.find({}, function (err, docs) {
             // Datafile only contains index definition
-            var datafileContents = model.deserialize(fs.readFileSync(testDb, 'utf8'));
+            let datafileContents = model.deserialize(fs.readFileSync(testDb, 'utf8'));
             assert.deepEqual(datafileContents, { $$indexCreated: { fieldName: 'a', unique: true } });
 
             docs.length.should.equal(0);
@@ -281,7 +281,7 @@ describe('Database', function () {
     });
 
     it("If timestampData option is set, a createdAt field is added and persisted", function (done) {
-      var newDoc = { hello: 'world' }, beginning = Date.now();
+      let newDoc = { hello: 'world' }, beginning = Date.now();
       d = new Datastore({ filename: testDb, timestampData: true, autoload: true });
       d.find({}, function (err, docs) {
         assert.isNull(err);
@@ -341,7 +341,7 @@ describe('Database', function () {
     });
 
     it("If timestampData is set but createdAt is specified by user, don't change it", function (done) {
-      var newDoc = { hello: 'world', createdAt: new Date(234) }, beginning = Date.now();
+      let newDoc = { hello: 'world', createdAt: new Date(234) }, beginning = Date.now();
       d = new Datastore({ filename: testDb, timestampData: true, autoload: true });
       d.insert(newDoc, function (err, insertedDoc) {
         insertedDoc = insertedDoc[0]
@@ -364,7 +364,7 @@ describe('Database', function () {
     });
 
     it("If timestampData is set but updatedAt is specified by user, don't change it", function (done) {
-      var newDoc = { hello: 'world', updatedAt: new Date(234) }, beginning = Date.now();
+      let newDoc = { hello: 'world', updatedAt: new Date(234) }, beginning = Date.now();
       d = new Datastore({ filename: testDb, timestampData: true, autoload: true });
       d.insert(newDoc, function (err, insertedDoc) {
         insertedDoc = insertedDoc[0]
@@ -407,7 +407,7 @@ describe('Database', function () {
      * Note: maybe using an in-memory only NeDB would give us an easier solution
      */
     it('If the callback throws an uncaught exception, do not catch it inside findOne, this is userspace concern', function (done) {
-      var tryCount = 0
+      let tryCount = 0
         , currentUncaughtExceptionHandlers = process.listeners('uncaughtException')
         , i
         ;
@@ -451,7 +451,7 @@ describe('Database', function () {
               _doc2 = _doc2[0]
               d.insert({ tf: 9 }, function () {
                 d.getCandidates({ r: 6, tf: 4 }, function (err, data) {
-                  var doc1 = _.find(data, function (d) { return d._id === _doc1._id; })
+                  let doc1 = _.find(data, function (d) { return d._id === _doc1._id; })
                     , doc2 = _.find(data, function (d) { return d._id === _doc2._id; })
                     ;
 
@@ -477,7 +477,7 @@ describe('Database', function () {
               d.insert({ tf: 9 }, function (err, _doc2) {
                 _doc2 = _doc2[0]
                 d.getCandidates({ r: 6, tf: { $in: [6, 9, 5] } }, function (err, data) {
-                  var doc1 = _.find(data, function (d) { return d._id === _doc1._id; })
+                  let doc1 = _.find(data, function (d) { return d._id === _doc1._id; })
                     , doc2 = _.find(data, function (d) { return d._id === _doc2._id; })
                     ;
 
@@ -506,7 +506,7 @@ describe('Database', function () {
                 _doc4 = _doc4[0]
                 d.getCandidates({ r: 6, notf: { $in: [6, 9, 5] } }, function (err, data) {
                   data = [...data]
-                  var doc1 = _.find(data, function (d) { return d._id === _doc1._id; })
+                  let doc1 = _.find(data, function (d) { return d._id === _doc1._id; })
                     , doc2 = _.find(data, function (d) { return d._id === _doc2._id; })
                     , doc3 = _.find(data, function (d) { return d._id === _doc3._id; })
                     , doc4 = _.find(data, function (d) { return d._id === _doc4._id; })
@@ -541,7 +541,7 @@ describe('Database', function () {
               d.insert({ tf: 9 }, function (err, _doc4) {
                 _doc4 = _doc4[0]
                 d.getCandidates({ r: 6, tf: { $lte: 9, $gte: 6 } }, function (err, data) {
-                  var doc2 = _.find(data, function (d) { return d._id === _doc2._id; })
+                  let doc2 = _.find(data, function (d) { return d._id === _doc2._id; })
                     , doc4 = _.find(data, function (d) { return d._id === _doc4._id; })
                     ;
 
@@ -575,12 +575,12 @@ describe('Database', function () {
 
                 d.on('compaction.done', function () {
                   // After compaction, no more mention of the document, correctly removed
-                  var datafileContents = fs.readFileSync(testDb, 'utf8');
+                  let datafileContents = fs.readFileSync(testDb, 'utf8');
                   datafileContents.split('\n').length.should.equal(1);
                   assert.isNull(datafileContents.match(/world/));
 
                   // New datastore on same datafile is empty
-                  var d2 = new Datastore({ filename: testDb, autoload: true });
+                  let d2 = new Datastore({ filename: testDb, autoload: true });
                   d2.findOne({}, function (err, doc) {
                     assert.isNull(err);
                     assert.isNull(doc);
@@ -774,7 +774,7 @@ describe('Database', function () {
     });
 
     it('Can find dates and objects (non JS-native types)', function (done) {
-      var date1 = new Date(1234543)
+      let date1 = new Date(1234543)
         , date2 = new Date(9999)
         ;
 
@@ -1114,7 +1114,7 @@ describe('Database', function () {
           n.should.equal(0);
 
           d.find({}, function (err, docs) {
-            var doc1 = _.find(docs, function (d) { return d.somedata === 'ok'; })
+            let doc1 = _.find(docs, function (d) { return d.somedata === 'ok'; })
               , doc2 = _.find(docs, function (d) { return d.somedata === 'again'; })
               , doc3 = _.find(docs, function (d) { return d.somedata === 'another'; })
               ;
@@ -1134,7 +1134,7 @@ describe('Database', function () {
     });
 
     it("If timestampData option is set, update the updatedAt field", function (done) {
-      var beginning = Date.now();
+      let beginning = Date.now();
       d = new Datastore({ filename: testDb, autoload: true, timestampData: true });
       d.insert({ hello: 'world' }, function (err, insertedDoc) {
         insertedDoc = insertedDoc[0]
@@ -1144,7 +1144,7 @@ describe('Database', function () {
 
         // Wait 100ms before performing the update
         setTimeout(function () {
-          var step1 = Date.now();
+          let step1 = Date.now();
           d.update({ _id: insertedDoc._id }, { $set: { hello: 'mars' } }, {}, function () {
             d.find({ _id: insertedDoc._id }, function (err, docs) {
               docs.length.should.equal(1);
@@ -1163,12 +1163,12 @@ describe('Database', function () {
     });
 
     it("Can update multiple documents matching the query", function (done) {
-      var id1, id2, id3;
+      let id1, id2, id3;
 
       // Test DB state after update and reload
       function testPostUpdateState (cb) {
         d.find({}, function (err, docs) {
-          var doc1 = _.find(docs, function (d) { return d._id === id1; })
+          let doc1 = _.find(docs, function (d) { return d._id === id1; })
             , doc2 = _.find(docs, function (d) { return d._id === id2; })
             , doc3 = _.find(docs, function (d) { return d._id === id3; })
             ;
@@ -1221,12 +1221,12 @@ describe('Database', function () {
     });
 
     it("Can update only one document matching the query", function (done) {
-      var id1, id2, id3;
+      let id1, id2, id3;
 
       // Test DB state after update and reload
       function testPostUpdateState (cb) {
         d.find({}, function (err, docs) {
-          var doc1 = _.find(docs, function (d) { return d._id === id1; })
+          let doc1 = _.find(docs, function (d) { return d._id === id1; })
             , doc2 = _.find(docs, function (d) { return d._id === id2; })
             , doc3 = _.find(docs, function (d) { return d._id === id3; })
             ;
@@ -1319,7 +1319,7 @@ describe('Database', function () {
           d.find({}, function (err, docs) {
             assert.isNull(err);
             docs.length.should.equal(1);
-            var doc = docs[0];
+            let doc = docs[0];
             Object.keys(doc).length.should.equal(3);
             doc.hello.should.equal('world');
             doc.bloup.should.equal('blap');
@@ -1333,7 +1333,7 @@ describe('Database', function () {
           d.find({ hello: 'world' }, function (err, docs) {
             assert.isNull(err);
             docs.length.should.equal(1);
-            var doc = docs[0];
+            let doc = docs[0];
             Object.keys(doc).length.should.equal(3);
             doc.hello.should.equal('world');
             doc.bloup.should.equal(3);
@@ -1347,7 +1347,7 @@ describe('Database', function () {
           d.find({ hello: 'world' }, function (err, docs) {
             assert.isNull(err);
             docs.length.should.equal(1);
-            var doc = docs[0];
+            let doc = docs[0];
             Object.keys(doc).length.should.equal(4);
             doc.cac.should.equal('rrr');
             doc.hello.should.equal('world');
@@ -1390,7 +1390,7 @@ describe('Database', function () {
     });
 
     it('Can update documents using multiple modifiers', function (done) {
-      var id;
+      let id;
 
       d.insert({ something: 'yup', other: 40 }, function (err, newDoc) {
         id = newDoc[0]._id;
@@ -1593,7 +1593,7 @@ describe('Database', function () {
               assert.isNull(err);
               nr.should.equal(1);
               d.find({}, function (err, docs) {
-                var d1 = _.find(docs, function (doc) { return doc._id === doc1._id })
+                let d1 = _.find(docs, function (doc) { return doc._id === doc1._id })
                   , d2 = _.find(docs, function (doc) { return doc._id === doc2._id })
                   , d3 = _.find(docs, function (doc) { return doc._id === doc3._id })
                   ;
@@ -1624,7 +1624,7 @@ describe('Database', function () {
 
               // No index modified
               _.each(d.indexes, function (index) {
-                var docs = index.getAll()
+                let docs = index.getAll()
                   , d1 = _.find(docs, function (doc) { return doc._id === doc1._id })
                   , d2 = _.find(docs, function (doc) { return doc._id === doc2._id })
                   , d3 = _.find(docs, function (doc) { return doc._id === doc3._id })
@@ -1655,7 +1655,7 @@ describe('Database', function () {
 
             // Check that no index was modified
             _.each(d.indexes, function (index) {
-              var docs = index.getAll()
+              let docs = index.getAll()
               , d1 = _.find(docs, function (doc) { return doc._id === doc1._id })
               , d2 = _.find(docs, function (doc) { return doc._id === doc2._id })
               ;
@@ -1705,10 +1705,10 @@ describe('Database', function () {
     });
 
     it("createdAt property is unchanged and updatedAt correct after an update, even a complete document replacement", function (done) {
-      var d2 = new Datastore({ inMemoryOnly: true, timestampData: true });
+      let d2 = new Datastore({ inMemoryOnly: true, timestampData: true });
       d2.insert({ a: 1 });
       d2.findOne({ a: 1 }, function (err, doc) {
-        var createdAt = doc.createdAt.getTime();
+        let createdAt = doc.createdAt.getTime();
 
         // Modifying update
         setTimeout(function () {
@@ -1819,7 +1819,7 @@ describe('Database', function () {
   describe('Remove', function () {
 
     it('Can remove multiple documents', function (done) {
-      var id1, id2, id3;
+      let id1, id2, id3;
 
       // Test DB status
       function testPostUpdateState (cb) {
@@ -1872,7 +1872,7 @@ describe('Database', function () {
               docs.length.should.equal(3);
 
               // Remove two docs simultaneously
-              var toRemove = ['Mars', 'Saturn'];
+              let toRemove = ['Mars', 'Saturn'];
               AsyncEach(toRemove, function(planet, cb) {
                 d.remove({ planet: planet }, function (err) { return cb(err); });
               }, function (err) {
@@ -1979,7 +1979,7 @@ describe('Database', function () {
               assert.isNull(err);
               nr.should.equal(1);
               d.find({}, function (err, docs) {
-                var d1 = _.find(docs, function (doc) { return doc._id === doc1._id })
+                let d1 = _.find(docs, function (doc) { return doc._id === doc1._id })
                   , d2 = _.find(docs, function (doc) { return doc._id === doc2._id })
                   , d3 = _.find(docs, function (doc) { return doc._id === doc3._id })
                   ;
@@ -2004,7 +2004,7 @@ describe('Database', function () {
     describe('ensureIndex and index initialization in database loading', function () {
 
       it('ensureIndex can be called right after a loadDatabase and be initialized and filled correctly', function (done) {
-        var now = new Date()
+        let now = new Date()
           , rawData = model.serialize({ _id: "aaa", z: "1", a: 2, ages: [1, 5, 12] }) + '\n' +
                       model.serialize({ _id: "bbb", z: "2", hello: 'world' }) + '\n' +
                       model.serialize({ _id: "ccc", z: "3", nested: { today: now } })
@@ -2035,7 +2035,7 @@ describe('Database', function () {
 
       
       it('ensureIndex should be able to create a NumberIndex', function (done) {
-        var now = new Date()
+        let now = new Date()
           , rawData = model.serialize({ _id: "aaa", z: "1", a: 2, ages: [1, 5, 12] }) + '\n' +
                       model.serialize({ _id: "bbb", z: 2, hello: 'world' }) + '\n' +
                       model.serialize({ _id: "ccc", z: "3", nested: { today: now } })
@@ -2092,7 +2092,7 @@ describe('Database', function () {
   
                     d.indexes.planet.getAll().length.should.equal(2);    
   
-                    var datafileContents = fs.readFileSync(testDb, 'utf8');
+                    let datafileContents = fs.readFileSync(testDb, 'utf8');
                     datafileContents.split('indexCreated').length.should.equal(2)
 
                     done();
@@ -2132,7 +2132,7 @@ describe('Database', function () {
   
                     d.indexes.planet.getAll().length.should.equal(2);    
   
-                    var datafileContents = fs.readFileSync(testDb, 'utf8');
+                    let datafileContents = fs.readFileSync(testDb, 'utf8');
                     datafileContents.split('indexCreated').length.should.equal(2)
 
                     done();
@@ -2173,7 +2173,7 @@ describe('Database', function () {
   
                     d.indexes.planet.getAll().length.should.equal(2);    
   
-                    var datafileContents = fs.readFileSync(testDb, 'utf8');
+                    let datafileContents = fs.readFileSync(testDb, 'utf8');
                     datafileContents.split('indexCreated').length.should.equal(2)
 
                     done();
@@ -2188,7 +2188,7 @@ describe('Database', function () {
       })
 
       it('ensureIndex can be called after the data set was modified and the index still be correct', function (done) {
-        var rawData = model.serialize({ _id: "aaa", z: "1", a: 2, ages: [1, 5, 12] }) + '\n' +
+        let rawData = model.serialize({ _id: "aaa", z: "1", a: 2, ages: [1, 5, 12] }) + '\n' +
                       model.serialize({ _id: "bbb", z: "2", hello: 'world' })
           ;
 
@@ -2222,7 +2222,7 @@ describe('Database', function () {
   
                       // The data in the z index is correct
                       d.find({}, function (err, docs) {
-                        var doc0 = _.find(docs, function (doc) { return doc._id === 'aaa'; })
+                        let doc0 = _.find(docs, function (doc) { return doc._id === 'aaa'; })
                           , doc1 = _.find(docs, function (doc) { return doc._id === newDoc1._id; })
                           , doc2 = _.find(docs, function (doc) { return doc._id === newDoc2._id; })
                           ;
@@ -2245,7 +2245,7 @@ describe('Database', function () {
       });
 
       it('ensureIndex can be called before a loadDatabase and still be initialized and filled correctly', function (done) {
-        var now = new Date()
+        let now = new Date()
           , rawData = model.serialize({ _id: "aaa", z: "1", a: 2, ages: [1, 5, 12] }) + '\n' +
                       model.serialize({ _id: "bbb", z: "2", hello: 'world' }) + '\n' +
                       model.serialize({ _id: "ccc", z: "3", nested: { today: now } })
@@ -2261,7 +2261,7 @@ describe('Database', function () {
 
           fs.writeFile(testDb, rawData, 'utf8', function () {
             d.loadDatabase(function () {
-              var doc1 = _.find(d.getAllData(), function (doc) { return doc.z === "1"; })
+              let doc1 = _.find(d.getAllData(), function (doc) { return doc.z === "1"; })
                 , doc2 = _.find(d.getAllData(), function (doc) { return doc.z === "2"; })
                 , doc3 = _.find(d.getAllData(), function (doc) { return doc.z === "3"; })
                 ;
@@ -2280,7 +2280,7 @@ describe('Database', function () {
       });
 
       it('Can initialize multiple indexes on a database load', function (done) {
-        var now = new Date()
+        let now = new Date()
           , rawData = model.serialize({ _id: "aaa", z: "1", a: 2, ages: [1, 5, 12] }) + '\n' +
                       model.serialize({ _id: "bbb", z: "2", a: 'world' }) + '\n' +
                       model.serialize({ _id: "ccc", z: "3", a: { today: now } })
@@ -2294,7 +2294,7 @@ describe('Database', function () {
 
             fs.writeFile(testDb, rawData, 'utf8', function () {
               d.loadDatabase(function (err) {
-                var doc1 = _.find(d.getAllData(), function (doc) { return doc.z === "1"; })
+                let doc1 = _.find(d.getAllData(), function (doc) { return doc.z === "1"; })
                   , doc2 = _.find(d.getAllData(), function (doc) { return doc.z === "2"; })
                   , doc3 = _.find(d.getAllData(), function (doc) { return doc.z === "3"; })
                   ;
@@ -2321,7 +2321,7 @@ describe('Database', function () {
       });
 
       it('If a unique constraint is not respected, database loading will not work and no data will be inserted', function (done) {
-        var now = new Date()
+        let now = new Date()
           , rawData = model.serialize({ _id: "aaa", z: "1", a: 2, ages: [1, 5, 12] }) + '\n' +
                       model.serialize({ _id: "bbb", z: "2", a: 'world' }) + '\n' +
                       model.serialize({ _id: "ccc", z: "1", a: { today: now } })
@@ -2606,7 +2606,7 @@ describe('Database', function () {
 
     describe('qupd', function(){
       it('Updating docs still works as before with indexing', function (done) {
-        var persDb = "workspace/qupd.db"
+        let persDb = "workspace/qupd.db"
         
         if (fs.existsSync(persDb)) { fs.writeFileSync(persDb, '', 'utf8'); }
         
@@ -2617,7 +2617,7 @@ describe('Database', function () {
             db.insert({ a: 2, b: 'hello' }, function (err, _doc2) {
               _doc2 = _doc2[0]
               db.update({b: "hello"}, { $inc: { a: 10 }, $set: { b: 'same' } }, { multi: true, qupd: true }, function (err, nr) {
-                var data = db.getAllData()
+                let data = db.getAllData()
                   , doc1 = _.find(data, function (doc) { return doc._id === _doc1._id; })
                   , doc2 = _.find(data, function (doc) { return doc._id === _doc2._id; })
                   ;
@@ -2632,7 +2632,7 @@ describe('Database', function () {
                 
                 db = new Datastore({ filename: persDb, autoload: true });              
                 db.loadDatabase(function (err) {
-                    var data = db.getAllData()
+                    let data = db.getAllData()
                     , doc1 = _.find(data, function (doc) { return doc._id === _doc1._id; })
                     , doc2 = _.find(data, function (doc) { return doc._id === _doc2._id; })
                     ;
@@ -2662,7 +2662,7 @@ describe('Database', function () {
             d.insert({ a: 2, b: 'si' }, function (err, _doc2) {
               _doc2 = _doc2[0]
               d.update({ a: 1 }, { $set: { a: 456, b: 'no' } }, {}, function (err, nr) {
-                var data = d.getAllData()
+                let data = d.getAllData()
                   , doc1 = _.find(data, function (doc) { return doc._id === _doc1._id; })
                   , doc2 = _.find(data, function (doc) { return doc._id === _doc2._id; })
                   ;
@@ -2675,7 +2675,7 @@ describe('Database', function () {
                 assert.deepEqual(doc2, { a: 2, b: 'si', _id: _doc2._id });
 
                 d.update({}, { $inc: { a: 10 }, $set: { b: 'same' } }, { multi: true }, function (err, nr) {
-                  var data = d.getAllData()
+                  let data = d.getAllData()
                     , doc1 = _.find(data, function (doc) { return doc._id === _doc1._id; })
                     , doc2 = _.find(data, function (doc) { return doc._id === _doc2._id; })
                     ;
@@ -2768,7 +2768,7 @@ describe('Database', function () {
                     _doc3 = _doc3[0]
                     // Will conflict with doc3
                     d.update({ a: 2 }, { $inc: { a: 10, c: 1000 }, $set: { b: 30 } }, {}, function (err) {
-                      var data = d.getAllData()
+                      let data = d.getAllData()
                         , doc1 = _.find(data, function (doc) { return doc._id === _doc1._id; })
                         , doc2 = _.find(data, function (doc) { return doc._id === _doc2._id; })
                         , doc3 = _.find(data, function (doc) { return doc._id === _doc3._id; })
@@ -2820,7 +2820,7 @@ describe('Database', function () {
                     _doc3 = _doc3[0]
                     // Will conflict with doc3
                     d.update({ a: { $in: [1, 2] } }, { $inc: { a: 10, c: 1000 }, $set: { b: 30 } }, { multi: true }, function (err) {
-                      var data = d.getAllData()
+                      let data = d.getAllData()
                         , doc1 = _.find(data, function (doc) { return doc._id === _doc1._id; })
                         , doc2 = _.find(data, function (doc) { return doc._id === _doc2._id; })
                         , doc3 = _.find(data, function (doc) { return doc._id === _doc3._id; })
@@ -2873,7 +2873,7 @@ describe('Database', function () {
               d.insert({ a: 3, b: 'coin' }, function (err, _doc3) {
                 _doc3 = _doc3[0]
                 d.remove({ a: 1 }, {}, function (err, nr) {
-                  var data = d.getAllData()
+                  let data = d.getAllData()
                   , doc2 = _.find(data, function (doc) { return doc._id === _doc2._id; })
                   , doc3 = _.find(data, function (doc) { return doc._id === _doc3._id; })
                   ;
@@ -2886,7 +2886,7 @@ describe('Database', function () {
                   assert.deepEqual(doc3, { a: 3, b: 'coin', _id: _doc3._id });
 
                   d.remove({ a: { $in: [2, 3] } }, { multi: true }, function (err, nr) {
-                    var data = d.getAllData()
+                    let data = d.getAllData()
                     ;
 
                     assert.isNull(err);
@@ -2957,7 +2957,7 @@ describe('Database', function () {
     describe('Persisting indexes', function () {
 
       it('Indexes are persisted to a separate file and recreated upon reload', function (done) {
-        var persDb = "workspace/persistIndexes.db"
+        let persDb = "workspace/persistIndexes.db"
           , db
           ;
 
@@ -3011,7 +3011,7 @@ describe('Database', function () {
       });
 
       it('Indexes are persisted with their options and recreated even if some db operation happen between loads', function (done) {
-        var persDb = "workspace/persistIndexes.db"
+        let persDb = "workspace/persistIndexes.db"
           , db
         ;
 
@@ -3091,7 +3091,7 @@ describe('Database', function () {
       });
 
       it('Indexes can also be removed and the remove persisted', function (done) {
-        var persDb = "workspace/persistIndexes.db"
+        let persDb = "workspace/persistIndexes.db"
           , db
         ;
 

@@ -1,4 +1,4 @@
-var fs = require('fs')
+let fs = require('fs')
   , child_process = require('child_process')
   , [AsyncWaterfall, AsyncWhilst] = [require('async/waterfall'), require('async/whilst')]
   , Nedb = require('../nedb/datastore')

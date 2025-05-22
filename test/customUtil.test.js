@@ -1,4 +1,4 @@
-var should = require('chai').should()
+let should = require('chai').should()
   , assert = require('chai').assert
   , customUtils = require('../nedb/customUtils')
   , fs = require('fs')

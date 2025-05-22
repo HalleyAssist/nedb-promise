@@ -1,4 +1,4 @@
-var BinarySearchTree = require('binary-search-tree-continued').AVLTree
+let BinarySearchTree = require('binary-search-tree-continued').AVLTree
   , model = require('../model')
 
 /**
@@ -104,7 +104,7 @@ BstIndex.prototype.insert = function (doc) {
  * @API private
  */
 BstIndex.prototype.insertMultipleDocs = function (docs) {
-  var i, error, failingI;
+  let i, error, failingI;
 
   for (i = 0; i < docs.length; i ++) {
     try {
@@ -133,7 +133,7 @@ BstIndex.prototype.insertMultipleDocs = function (docs) {
  * O(log(n))
  */
 BstIndex.prototype.remove = function (doc) {
-  var key, self = this;
+  let key, self = this;
 
   if (Array.isArray(doc)) { doc.forEach(function (d) { self.remove(d); }); return; }
 
@@ -180,7 +180,7 @@ BstIndex.prototype.update = function (oldDoc, newDoc) {
  * @API private
  */
 BstIndex.prototype.updateMultipleDocs = function (pairs) {
-  var i, failingI, error;
+  let i, failingI, error;
 
   for (i = 0; i < pairs.length; i ++) {
     this.remove(pairs[i].oldDoc);
@@ -215,7 +215,7 @@ BstIndex.prototype.updateMultipleDocs = function (pairs) {
  * Revert an update
  */
 BstIndex.prototype.revertUpdate = function (oldDoc, newDoc) {
-  var revert = [];
+  let revert = [];
 
   if (!Array.isArray(oldDoc)) {
     this.update(newDoc, oldDoc);

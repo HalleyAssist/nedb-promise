@@ -1,4 +1,4 @@
-var model = require('../model')
+let model = require('../model')
 
 /**
  * Create a new index
@@ -98,7 +98,7 @@ HashIndex.prototype.set = function(doc, key){
  * @API private
  */
 HashIndex.prototype.insertMultipleDocs = function (docs) {
-  var i, error, failingI;
+  let i, error, failingI;
 
   for (i = 0; i < docs.length; i ++) {
     try {
@@ -127,7 +127,7 @@ HashIndex.prototype.insertMultipleDocs = function (docs) {
  * O(log(n))
  */
 HashIndex.prototype.remove = function (doc) {
-  var key, self = this;
+  let key, self = this;
 
   if (Array.isArray(doc)) { doc.forEach(function (d) { self.remove(d); }); return; }
 
@@ -192,7 +192,7 @@ HashIndex.prototype.update = function (oldDoc, newDoc) {
  * @API private
  */
 HashIndex.prototype.updateMultipleDocs = function (pairs) {
-  var i, failingI, error;
+  let i, failingI, error;
 
   for (i = 0; i < pairs.length; i ++) {
     this.remove(pairs[i].oldDoc);
@@ -227,7 +227,7 @@ HashIndex.prototype.updateMultipleDocs = function (pairs) {
  * Revert an update
  */
 HashIndex.prototype.revertUpdate = function (oldDoc, newDoc) {
-  var revert = [];
+  let revert = [];
 
   if (!Array.isArray(oldDoc)) {
     this.update(newDoc, oldDoc);

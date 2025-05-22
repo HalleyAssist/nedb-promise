@@ -1,4 +1,4 @@
-var Index = require('../nedb/indexes/bstIndex')
+let Index = require('../nedb/indexes/bstIndex')
   , NumberIndex = require('../nedb/indexes/numberIndex')
   , customUtils = require('../nedb/customUtils')
   , should = require('chai').should()
@@ -13,7 +13,7 @@ describe('Indexes', function () {
   describe('Insertion', function () {
 
     it('Can insert pointers to documents in the index correctly when they have the field', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -36,7 +36,7 @@ describe('Indexes', function () {
     });
 
     it('Should be able to handle a NumberIndex', function () {
-      var idx = new NumberIndex({ fieldName: 'a', type: 'int' })
+      let idx = new NumberIndex({ fieldName: 'a', type: 'int' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -59,7 +59,7 @@ describe('Indexes', function () {
     });
 
     it('Inserting twice for the same fieldName in a unique index will result in an error thrown', function () {
-      var idx = new Index({ fieldName: 'tf', unique: true })
+      let idx = new Index({ fieldName: 'tf', unique: true })
         , doc1 = { a: 5, tf: 'hello' }
         ;
 
@@ -69,7 +69,7 @@ describe('Indexes', function () {
     });
 
     it('Inserting twice for a fieldName the docs dont have with a unique index results in an error thrown', function () {
-      var idx = new Index({ fieldName: 'nope', unique: true })
+      let idx = new Index({ fieldName: 'nope', unique: true })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 5, tf: 'world' }
         ;
@@ -80,7 +80,7 @@ describe('Indexes', function () {
     });
 
     it('Inserting twice for a fieldName the docs dont have with a unique and sparse index will not throw, since the docs will be non indexed', function () {
-      var idx = new Index({ fieldName: 'nope', unique: true, sparse: true })
+      let idx = new Index({ fieldName: 'nope', unique: true, sparse: true })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 5, tf: 'world' }
         ;
@@ -91,7 +91,7 @@ describe('Indexes', function () {
     });
 
     it('Works with dot notation', function () {
-      var idx = new Index({ fieldName: 'tf.nested' })
+      let idx = new Index({ fieldName: 'tf.nested' })
         , doc1 = { a: 5, tf: { nested: 'hello' } }
         , doc2 = { a: 8, tf: { nested: 'world', additional: true } }
         , doc3 = { a: 2, tf: { nested: 'bloup', age: 42 } }
@@ -113,7 +113,7 @@ describe('Indexes', function () {
     });
 
     it('Can insert an array of documents', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -127,7 +127,7 @@ describe('Indexes', function () {
     });
 
     it('When inserting an array of elements, if an error is thrown all inserts need to be rolled back', function () {
-      var idx = new Index({ fieldName: 'tf', unique: true })
+      let idx = new Index({ fieldName: 'tf', unique: true })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc2b = { a: 84, tf: 'world' }
@@ -149,7 +149,7 @@ describe('Indexes', function () {
     describe('Array fields', function () {
 
       it('Inserts one entry per array element in the index', function () {
-        var obj = { tf: ['aa', 'bb'], really: 'yeah' }
+        let obj = { tf: ['aa', 'bb'], really: 'yeah' }
           , obj2 = { tf: 'normal', yes: 'indeed' }
           , idx = new Index({ fieldName: 'tf' })
           ;
@@ -164,7 +164,7 @@ describe('Indexes', function () {
       });
 
       it('Inserts one entry per array element in the index, type-checked', function () {
-        var obj = { tf: ['42', 42, new Date(42), 42], really: 'yeah' }
+        let obj = { tf: ['42', 42, new Date(42), 42], really: 'yeah' }
           , idx = new Index({ fieldName: 'tf' })
           ;
 
@@ -176,7 +176,7 @@ describe('Indexes', function () {
       });
 
       it('Inserts one entry per unique array element in the index, the unique constraint only holds across documents', function () {
-        var obj = { tf: ['aa', 'aa'], really: 'yeah' }
+        let obj = { tf: ['aa', 'aa'], really: 'yeah' }
           , obj2 = { tf: ['cc', 'yy', 'cc'], yes: 'indeed' }
           , idx = new Index({ fieldName: 'tf', unique: true })
           ;
@@ -190,7 +190,7 @@ describe('Indexes', function () {
       });
 
       it('The unique constraint holds across documents', function () {
-        var obj = { tf: ['aa', 'aa'], really: 'yeah' }
+        let obj = { tf: ['aa', 'aa'], really: 'yeah' }
           , obj2 = { tf: ['cc', 'aa', 'cc'], yes: 'indeed' }
           , idx = new Index({ fieldName: 'tf', unique: true })
           ;
@@ -203,7 +203,7 @@ describe('Indexes', function () {
       });
 
       it('When removing a document, remove it from the index at all unique array elements', function () {
-        var obj = { tf: ['aa', 'aa'], really: 'yeah' }
+        let obj = { tf: ['aa', 'aa'], really: 'yeah' }
           , obj2 = { tf: ['cc', 'aa', 'cc'], yes: 'indeed' }
           , idx = new Index({ fieldName: 'tf' })
           ;
@@ -223,7 +223,7 @@ describe('Indexes', function () {
       });
 
       it('If a unique constraint is violated when inserting an array key, roll back all inserts before the key', function () {
-        var obj = { tf: ['aa', 'bb'], really: 'yeah' }
+        let obj = { tf: ['aa', 'bb'], really: 'yeah' }
           , obj2 = { tf: ['cc', 'dd', 'aa', 'ee'], yes: 'indeed' }
           , idx = new Index({ fieldName: 'tf', unique: true })
           ;
@@ -253,7 +253,7 @@ describe('Indexes', function () {
   describe('Removal', function () {
 
     it('Can remove pointers from the index, even when multiple documents have the same key', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -277,7 +277,7 @@ describe('Indexes', function () {
     });
 
     it('If we have a sparse index, removing a non indexed doc has no effect', function () {
-      var idx = new Index({ fieldName: 'nope', sparse: true })
+      let idx = new Index({ fieldName: 'nope', sparse: true })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 5, tf: 'world' }
         ;
@@ -291,7 +291,7 @@ describe('Indexes', function () {
     });
 
     it('Works with dot notation', function () {
-      var idx = new Index({ fieldName: 'tf.nested' })
+      let idx = new Index({ fieldName: 'tf.nested' })
         , doc1 = { a: 5, tf: { nested: 'hello' } }
         , doc2 = { a: 8, tf: { nested: 'world', additional: true } }
         , doc3 = { a: 2, tf: { nested: 'bloup', age: 42 } }
@@ -315,7 +315,7 @@ describe('Indexes', function () {
     });
 
     it('Can remove an array of documents', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -336,7 +336,7 @@ describe('Indexes', function () {
   describe('Update', function () {
 
     it('Can update a document whose key did or didnt change', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -360,7 +360,7 @@ describe('Indexes', function () {
       assert.deepEqual([...idx.tree.search('changed')], [doc5]);
     });
     it('Can update a document whose key did or didnt change with NumberIndex', function () {
-      var idx = new NumberIndex({ fieldName: 'a', type: 'int' })
+      let idx = new NumberIndex({ fieldName: 'a', type: 'int' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -385,7 +385,7 @@ describe('Indexes', function () {
     });
 
     it('If a simple update violates a unique constraint, changes are rolled back and an error thrown', function () {
-      var idx = new Index({ fieldName: 'tf', unique: true })
+      let idx = new Index({ fieldName: 'tf', unique: true })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -415,7 +415,7 @@ describe('Indexes', function () {
     });
 
     it('Can update an array of documents', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -441,7 +441,7 @@ describe('Indexes', function () {
     });
 
     it('If a unique constraint is violated during an array-update, all changes are rolled back and an error thrown', function () {
-      var idx = new Index({ fieldName: 'tf', unique: true })
+      let idx = new Index({ fieldName: 'tf', unique: true })
         , doc0 = { a: 432, tf: 'notthistoo' }
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
@@ -487,7 +487,7 @@ describe('Indexes', function () {
     });
 
     it('If an update doesnt change a document, the unique constraint is not violated', function () {
-      var idx = new Index({ fieldName: 'tf', unique: true })
+      let idx = new Index({ fieldName: 'tf', unique: true })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -506,7 +506,7 @@ describe('Indexes', function () {
     });
 
     it('Can revert simple and batch updates', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -569,7 +569,7 @@ describe('Indexes', function () {
   describe('Get matching documents', function () {
 
     it('Get all documents where fieldName is equal to the given value, or an empty array if no match', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -587,7 +587,7 @@ describe('Indexes', function () {
     });
 
     it('Can get all documents for a given key in a unique index', function () {
-      var idx = new Index({ fieldName: 'tf', unique: true })
+      let idx = new Index({ fieldName: 'tf', unique: true })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -603,7 +603,7 @@ describe('Indexes', function () {
     });
 
     it('Can get all documents for which a field is undefined', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 2, nottf: 'bloup' }
         , doc3 = { a: 8, tf: 'world' }
@@ -630,7 +630,7 @@ describe('Indexes', function () {
     });
 
     it('Can get all documents for which a field is null', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 2, tf: null }
         , doc3 = { a: 8, tf: 'world' }
@@ -657,7 +657,7 @@ describe('Indexes', function () {
     });
 
     it('Can get all documents for a given key in a sparse index, but not unindexed docs (= field undefined)', function () {
-      var idx = new Index({ fieldName: 'tf', sparse: true })
+      let idx = new Index({ fieldName: 'tf', sparse: true })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 2, nottf: 'bloup' }
         , doc3 = { a: 8, tf: 'world' }
@@ -681,7 +681,7 @@ describe('Indexes', function () {
       // relies on the _id property being set, otherwise we have to use a quadratic algorithm
       // or a fingerprinting algorithm, both solutions too complicated and slow given that live nedb
       // indexes documents with _id always set
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello', _id: '1' }
         , doc2 = { a: 2, tf: 'bloup', _id: '2' }
         , doc3 = { a: 8, tf: 'world', _id: '3' }
@@ -703,7 +703,7 @@ describe('Indexes', function () {
     });
 
     it('Can get all documents whose key is between certain bounds', function () {
-      var idx = new Index({ fieldName: 'a' })
+      let idx = new Index({ fieldName: 'a' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 2, tf: 'bloup' }
         , doc3 = { a: 8, tf: 'world' }
@@ -728,7 +728,7 @@ describe('Indexes', function () {
   describe('Resetting', function () {
 
     it('Can reset an index without any new data, the index will be empty afterwards', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -751,7 +751,7 @@ describe('Indexes', function () {
     });
 
     it('Can reset an index and initialize it with one document', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -776,7 +776,7 @@ describe('Indexes', function () {
     });
 
     it('Can reset an index and initialize it with an array of documents', function () {
-      var idx = new Index({ fieldName: 'tf' })
+      let idx = new Index({ fieldName: 'tf' })
         , doc1 = { a: 5, tf: 'hello' }
         , doc2 = { a: 8, tf: 'world' }
         , doc3 = { a: 2, tf: 'bloup' }
@@ -804,7 +804,7 @@ describe('Indexes', function () {
   });   // ==== End of 'Resetting' ==== //
 
   it('Get all elements in the index', function () {
-    var idx = new Index({ fieldName: 'a' })
+    let idx = new Index({ fieldName: 'a' })
       , doc1 = { a: 5, tf: 'hello' }
       , doc2 = { a: 8, tf: 'world' }
       , doc3 = { a: 2, tf: 'bloup' }

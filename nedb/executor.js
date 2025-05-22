@@ -2,7 +2,7 @@
  * Responsible for sequentially executing actions on the database
  */
 
-var [AsyncQueue] = [require('async/queue')]
+let [AsyncQueue] = [require('async/queue')]
 
 function Executor () {
   this.buffer = [];
@@ -12,8 +12,8 @@ function Executor () {
   // This queue will execute all commands, one-by-one in order
   this.queue = AsyncQueue(function (task, cb) {
     // task.arguments is an array-like object on which adding a new field doesn't work, so we transform it into a real array
-    var newArguments = [...task.arguments];
-    var lastArg = task.arguments[task.arguments.length - 1];
+    let newArguments = [...task.arguments];
+    let lastArg = task.arguments[task.arguments.length - 1];
 
     // Always tell the queue task is complete. Execute callback if any was given.
     if (typeof lastArg === 'function') {
@@ -61,10 +61,10 @@ Executor.prototype.push = function (task, forceQueuing, close) {
       this._push(task, forceQueuing);
     } else {
       // return an error if a callback exists, otherwise throw an exception
-      var err = new Error("Attempting operation on closed database.");
-      var args = task.arguments;
+      let err = new Error("Attempting operation on closed database.");
+      let args = task.arguments;
       if (args.length > 0) {
-        var cb = args[args.length-1];
+        let cb = args[args.length-1];
         if (typeof(cb) === 'function') {
           return cb(err);
         }
@@ -87,7 +87,7 @@ Executor.prototype._push = function (task, forceQueuing) {
  * Automatically sets executor as ready
  */
 Executor.prototype.processBuffer = function () {
-  var i;
+  let i;
   this.ready = true;
   for (i = 0; i < this.buffer.length; i ++) { this.queue.push(this.buffer[i]); }
   this.buffer = [];

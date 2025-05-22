@@ -5,7 +5,7 @@
  * Querying, update
  */
 
-var util = require('util')
+let util = require('util')
   , modifierFunctions = {}
   , lastStepModifierFunctions = {}
   , comparisonFunctions = {}
@@ -128,7 +128,7 @@ function deepCopy (obj) {
 
 
 function deepCopyStrictKeys(obj){
-  var res;
+  let res;
 
   if ( typeof obj === 'boolean' ||
        typeof obj === 'number' ||
@@ -185,7 +185,7 @@ function compareNSB (a, b) {
 }
 
 function compareArrays (a, b) {
-  var i, comp;
+  let i, comp;
 
   for (i = 0; i < Math.min(a.length, b.length); i ++) {
     comp = compareThings(a[i], b[i]);
@@ -209,7 +209,7 @@ function compareArrays (a, b) {
  * @param {Function} _compareStrings String comparing function, returning -1, 0 or 1, overriding default string comparison (useful for languages with accented letters)
  */
 function compareThings (a, b, _compareStrings) {
-  var compareStrings = _compareStrings || compareNSB;
+  let compareStrings = _compareStrings || compareNSB;
 
   // undefined
   if (a === undefined) { return b === undefined ? 0 : -1; }
@@ -317,7 +317,7 @@ lastStepModifierFunctions.$push = function (obj, field, value) {
     if (value.$slice === 0) {
       obj[field] = [];
     } else {
-      var start, end, n = obj[field].length;
+      let start, end, n = obj[field].length;
       if (value.$slice < 0) {
         start = Math.max(0, n + value.$slice);
         end = n;
@@ -339,7 +339,7 @@ lastStepModifierFunctions.$push = function (obj, field, value) {
  * Note that it doesn't check whether the original array contains duplicates
  */
 lastStepModifierFunctions.$addToSet = function (obj, field, value) {
-  var addToSet = true;
+  let addToSet = true;
 
   // Create the array if it doesn't exist
   if (obj[field]===undefined) { obj[field] = []; }
@@ -382,7 +382,7 @@ lastStepModifierFunctions.$pop = function (obj, field, value) {
  * Removes all instances of a value from an existing array
  */
 lastStepModifierFunctions.$pull = function (obj, field, value) {
-  var arr, i;
+  let arr, i;
 
   if (!Array.isArray(obj[field])) { throw new Error("Can't $pull an element from non-array values"); }
 
@@ -514,7 +514,7 @@ function getDotFn (field) {
   if(!ecfn) {
     let fnCode = '';
 
-    var fieldParts = typeof field === 'string' ? field.split('.') : field
+    let fieldParts = typeof field === 'string' ? field.split('.') : field
     for(const fp of fieldParts){
       if(isNaN(fp)){
         fnCode += `if(Array.isArray(obj)){`
@@ -563,7 +563,7 @@ function setionDotValue (obj, field, create) {
   if(!ecfn) {
     let fnCode = 'let o\n';
 
-    var fieldParts = typeof field === 'string' ? field.split('.') : field
+    let fieldParts = typeof field === 'string' ? field.split('.') : field
     const last = fieldParts.pop()
     for(const fp of fieldParts){
       fnCode += `o = obj[${JSON.stringify(fp)}]\n`
@@ -587,7 +587,7 @@ function setionDotValue (obj, field, create) {
  * Returns true if they are, false otherwise
  */
 function areThingsEqual (a, b) {
-  var aKeys , bKeys , i;
+  let aKeys , bKeys , i;
 
   // Strings, booleans, numbers, null
   if (a === null || typeof a === 'string' || typeof a === 'boolean' || typeof a === 'number' ||
@@ -660,7 +660,7 @@ comparisonFunctions.$ne = function (a, b) {
 };
 
 comparisonFunctions.$in = function (a, b) {
-  var i;
+  let i;
 
   if (!Array.isArray(b)) { throw new Error("$in operator called with a non-array"); }
 
@@ -710,8 +710,8 @@ comparisonFunctions.$size = function (obj, value) {
 };
 comparisonFunctions.$elemMatch = function (obj, value) {
   if (!Array.isArray(obj)) { return false; }
-  var i = obj.length;
-  var result = false;   // Initialize result
+  let i = obj.length;
+  let result = false;   // Initialize result
   while (i--) {
     if (match(obj[i], value)) {   // If match for array element, return true
       result = true;
@@ -735,7 +735,7 @@ arrayComparisonFunctions.$elemMatch = true;
  * @param {Array of Queries} query
  */
 logicalOperators.$or = function (obj, query) {
-  var i;
+  let i;
 
   if (!Array.isArray(query)) { throw new Error("$or operator used without an array"); }
 
@@ -753,7 +753,7 @@ logicalOperators.$or = function (obj, query) {
  * @param {Array of Queries} query
  */
 logicalOperators.$and = function (obj, query) {
-  var i;
+  let i;
 
   if (!Array.isArray(query)) { throw new Error("$and operator used without an array"); }
 
@@ -781,7 +781,7 @@ logicalOperators.$not = function (obj, query) {
  * @param {Query} query
  */
 logicalOperators.$where = function (obj, fn) {
-  var result;
+  let result;
 
   if (typeof fn !== 'function') { throw new Error("$where operator used without a function"); }
 
@@ -925,7 +925,7 @@ function matchArray(obj, queryKey, queryValue, objValue){
  * if the treatObjAsValue flag is set, don't try to match every part separately, but the array as a whole
  */
 function matchQueryPart (obj, queryKey, queryValue, treatObjAsValue) {
-  var objValue = getDotValue(obj, queryKey)
+  let objValue = getDotValue(obj, queryKey)
 
 
   // Using regular expressions with basic querying

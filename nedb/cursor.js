@@ -1,7 +1,7 @@
 /**
  * Manage access to data, be it to find, update or remove it
  */
-var model = require('./model')
+let model = require('./model')
 
 
 /**
@@ -89,7 +89,7 @@ Cursor.prototype.project = function (candidates) {
 
   // Do the actual projection
   candidates.forEach(function (candidate) {
-    var toPush;
+    let toPush;
     if (action === 1) {   // pick-type projection
       toPush = { $set: {} };
       keys.forEach(function (k) {
@@ -122,7 +122,7 @@ Cursor.prototype.project = function (candidates) {
  * @param {Function} callback - Signature: err, results
  */
 Cursor.prototype._exec = function(_callback) {
-  var res = [], added = 0, skipped = 0 , error = null;
+  let res = [], added = 0, skipped = 0 , error = null;
 
   const callback = (error, res) => {
     if (this.execFn) {
@@ -175,7 +175,7 @@ Cursor.prototype._exec = function(_callback) {
       const keys = Object.keys(this._sort);
 
       // Sorting
-      var criteria = [];
+      let criteria = [];
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
         criteria.push({ key: key, direction: this._sort[key] });
@@ -193,7 +193,7 @@ Cursor.prototype._exec = function(_callback) {
       });
 
       // Applying limit and skip
-      var limit = this._limit || res.length
+      let limit = this._limit || res.length
         , skip = this._skip || 0;
 
       res = res.slice(skip, skip + limit);

@@ -1,4 +1,4 @@
-var customUtils = require('./customUtils')
+let customUtils = require('./customUtils')
   , model = require('./model')
   , Executor = require('./executor')
   , Index = require('./indexes/bstIndex')
@@ -28,7 +28,7 @@ var customUtils = require('./customUtils')
  * * compaction.done - Fired whenever a compaction operation was finished
  */
 function Datastore (options) {
-  var filename;
+  let filename;
 
   // Retrocompatibility with v0.6 and before
   if (typeof options === 'string') {
@@ -165,7 +165,7 @@ Datastore.prototype.createIndex = function(options){
  * @param {Function} cb Optional callback, signature: err
  */
 Datastore.prototype._ensureIndex = function (options, cb) {
-  var err
+  let err
     , callback = cb || function () {};
 
   options = options || {};
@@ -207,7 +207,7 @@ Datastore.prototype.ensureIndex = function () {
  * @param {Function} cb Optional callback, signature: err
  */
 Datastore.prototype.removeIndex = function (fieldName, cb) {
-  var callback = cb || function () {};
+  let callback = cb || function () {};
 
   if(!this.indexes[fieldName]){
     return cb(null)
@@ -225,7 +225,7 @@ Datastore.prototype.removeIndex = function (fieldName, cb) {
  * Add one or several document(s) to all indexes
  */
 Datastore.prototype.addToIndexes = function (doc) {
-  var i, failingIndex, error
+  let i, failingIndex, error
     , keys = Object.keys(this.indexes)
     ;
 
@@ -267,7 +267,7 @@ Datastore.prototype.removeFromIndexes = function (doc) {
  * If one update violates a constraint, all changes are rolled back
  */
 Datastore.prototype.updateIndexes = function (oldDoc, newDoc) {
-  var i, failingIndex, error
+  let i, failingIndex, error
     , keys = Object.keys(this.indexes),
       multiple = Array.isArray(oldDoc)
     ;
@@ -359,8 +359,8 @@ Datastore.prototype.getCandidates = function (query, dontExpireStaleDocs, callba
   }
 
   if(query['$and']){
-    var newQuery = {}
-    var queryParts = query['$and']
+    let newQuery = {}
+    let queryParts = query['$and']
     for(let part of queryParts){
       const key = Object.keys(part)[0]
       newQuery[key] = part[key]
@@ -386,7 +386,7 @@ Datastore.prototype.getCandidates = function (query, dontExpireStaleDocs, callba
  * @api private Use Datastore.insert which has the same signature
  */
 Datastore.prototype._insert = function (newDoc, deepCopy, cb) {
-  var callback = cb || function () {}
+  let callback = cb || function () {}
     , preparedDoc
     ;
 
@@ -423,7 +423,7 @@ Datastore.prototype.createNewId = function () {
  * @api private
  */
 Datastore.prototype.prepareDocumentForInsertion = function (newDoc, deepCopy = true) {
-  var preparedDoc
+  let preparedDoc
 
   if (Array.isArray(newDoc)) {
     preparedDoc = [];
@@ -462,7 +462,7 @@ Datastore.prototype._insertInCache = function (preparedDoc) {
  * @api private
  */
 Datastore.prototype._insertMultipleDocsInCache = function (preparedDocs) {
-  var i, failingI, error;
+  let i, failingI, error;
 
   for (i = 0; i < preparedDocs.length; i ++) {
     try {
@@ -511,7 +511,7 @@ Datastore.prototype.insert = function () {
  * @param {Object} query MongoDB-style query
  */
 Datastore.prototype.count = function(query, callback) {
-  var cursor = new Cursor(this, query, function(err, docs, callback) {
+  let cursor = new Cursor(this, query, function(err, docs, callback) {
     if (err) { return callback(err); }
     return callback(null, docs.length);
   });
@@ -570,7 +570,7 @@ Datastore.prototype.find = function (query, projection, callback) {
  * @param {Object} options options, including: MongoDB-style projection
  */
 Datastore.prototype.findOne = function (query, options, callback) {
-  var cursor = new Cursor(this, query, function(err, docs, callback) {
+  let cursor = new Cursor(this, query, function(err, docs, callback) {
     if (err) { return callback(err); }
     if (docs.length === 0) return callback(null, null);
     let d = docs[0]
@@ -614,7 +614,7 @@ Datastore.prototype._upsert = function (query, updateQuery, options, cb) {
   }
 
   // Need to use an internal function not tied to the executor to avoid deadlock
-  var cursor = new Cursor(this, upsertQuery);
+  let cursor = new Cursor(this, upsertQuery);
   cursor.limit(1)._exec((err, docs) => {
     if (err) { return cb(err); }
     if (docs.length === 1) {
@@ -689,7 +689,7 @@ Datastore.prototype.upsert = function () {
  * @api private Use Datastore.update which has the same signature
  */
 Datastore.prototype._update = function (query, updateQuery, options, cb) {
-  var numReplaced = 0
+  let numReplaced = 0
     , multi
     ;
 
@@ -698,7 +698,7 @@ Datastore.prototype._update = function (query, updateQuery, options, cb) {
   multi = options.multi !== undefined ? options.multi : false;
   const returnValue = options.return !== false
 
-  var modifiedDoc , modifications = [], updatedDocs = [], createdAt;
+  let modifiedDoc , modifications = [], updatedDocs = [], createdAt;
 
   this.getCandidates(query, (err, candidates) => {
     if (err) { return cb(err); }

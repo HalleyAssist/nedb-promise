@@ -28,7 +28,7 @@ class Finder {
 const Methods = ['loadDatabase', 'insert', 'insertUnsafe', 'insertUnsafest', 'findOne', 'count', 'update', 'upsert', 'remove', 'ensureIndex', 'removeIndex', 'cleanupExpired']
 
 function fromInstance(nedbInstance) {
-	var newDB = { nedb: nedbInstance }
+	let newDB = { nedb: nedbInstance }
 
 	for(const m of Methods){
 		newDB[m] = util.promisify(nedbInstance[m].bind(nedbInstance))
@@ -45,19 +45,19 @@ function fromInstance(nedbInstance) {
 	}
 
 	newDB.cfind = function (query, projections) {
-		var cursor = nedbInstance.find(query, projections)
+		let cursor = nedbInstance.find(query, projections)
 		cursor.exec = util.promisify(cursor.exec.bind(cursor))
 		return cursor
 	}
 
 	newDB.cfindOne = function (query, projections) {
-		var cursor = nedbInstance.findOne(query, projections)
+		let cursor = nedbInstance.findOne(query, projections)
 		cursor.exec = util.promisify(cursor.exec.bind(cursor))
 		return cursor
 	}
 
 	newDB.ccount = function (query) {
-		var cursor = nedbInstance.count(query)
+		let cursor = nedbInstance.count(query)
 		cursor.exec = util.promisify(cursor.exec.bind(cursor))
 		return cursor
 	}
@@ -80,7 +80,7 @@ function fromInstance(nedbInstance) {
 }
 
 function datastore(options) {
-	var nedbInstance = new NedbDatastore(options)
+	let nedbInstance = new NedbDatastore(options)
 	return fromInstance(nedbInstance)
 }
 

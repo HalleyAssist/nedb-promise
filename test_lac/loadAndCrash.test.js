@@ -1,13 +1,13 @@
 /**
  * Load and modify part of fs to ensure writeFile will crash after writing 5000 bytes
  */
-var fs = require('fs');
+let fs = require('fs');
 
 function rethrow() {
   // Only enable in debug mode. A backtrace uses ~1000 bytes of heap space and
   // is fairly slow to generate.
   if (DEBUG) {
-    var backtrace = new Error();
+    let backtrace = new Error();
     return function(err) {
       if (err) {
         backtrace.stack = err.name + ': ' + err.message +
@@ -38,12 +38,12 @@ function assertEncoding(encoding) {
   }
 }
 
-var onePassDone = false;
+let onePassDone = false;
 function writeAll(fd, isUserFd, buffer, offset, length, position, callback_) {
-  var callback = maybeCallback(arguments[arguments.length - 1]);
+  let callback = maybeCallback(arguments[arguments.length - 1]);
 
   if (onePassDone) { process.exit(1); }   // Crash on purpose before rewrite done
-  var l = Math.min(5000, length);   // Force write by chunks of 5000 bytes to ensure data will be incomplete on crash
+  let l = Math.min(5000, length);   // Force write by chunks of 5000 bytes to ensure data will be incomplete on crash
 
   // write(fd, buffer, offset, length, position, callback)
   fs.write(fd, buffer, offset, l, position, function(writeErr, written) {
@@ -76,7 +76,7 @@ function writeAll(fd, isUserFd, buffer, offset, length, position, callback_) {
 }
 
 fs.writeFile = function(path, data, options, callback_) {
-  var callback = maybeCallback(arguments[arguments.length - 1]);
+  let callback = maybeCallback(arguments[arguments.length - 1]);
 
   if (!options || typeof options === 'function') {
     options = { encoding: 'utf8', mode: 438, flag: 'w' }; // Mode 438 == 0o666 (compatibility with older Node releases)
@@ -88,7 +88,7 @@ fs.writeFile = function(path, data, options, callback_) {
 
   assertEncoding(options.encoding);
 
-  var flag = options.flag || 'w';
+  let flag = options.flag || 'w';
 
   if (isFd(path)) {
     writeFd(path, true);
@@ -104,9 +104,9 @@ fs.writeFile = function(path, data, options, callback_) {
   });
 
   function writeFd(fd, isUserFd) {
-    var buffer = (data instanceof Buffer) ? data : new Buffer('' + data,
+    let buffer = (data instanceof Buffer) ? data : new Buffer('' + data,
         options.encoding || 'utf8');
-    var position = /a/.test(flag) ? null : 0;
+    let position = /a/.test(flag) ? null : 0;
 
     writeAll(fd, isUserFd, buffer, 0, buffer.length, position, callback);
   }
@@ -116,7 +116,7 @@ fs.writeFile = function(path, data, options, callback_) {
 
 
 // End of fs modification
-var Nedb = require('../lib/datastore.js')
+let Nedb = require('../lib/datastore.js')
   , db = new Nedb({ filename: 'workspace/lac.db' })
   ;
 
