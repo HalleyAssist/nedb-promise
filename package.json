@@ -15,8 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.6.1",
-    "binary-search-tree-continued": "git+https://github.com/HalleyAssist/node-binary-search-tree-continued.git",
-    "mkdirp": "~0.5.1"
+    "binary-search-tree-continued": "git+https://github.com/HalleyAssist/node-binary-search-tree-continued.git"
   },
   "devDependencies": {
     "chai": "^3.2.0",

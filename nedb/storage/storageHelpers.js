@@ -8,11 +8,9 @@
  */
 
 let fs = require('fs')
-  , mkdirp = require('mkdirp')
   , [AsyncWaterfall, AsyncApply] = [require('async/waterfall'), require('async/apply')]
   , path = require('path')
-  , storage = {}
-  ;
+  , storage = {};
 
 storage.exists = fs.exists;
 storage.rename = fs.rename;
@@ -20,7 +18,12 @@ storage.writeFile = fs.writeFile;
 storage.unlink = fs.unlink;
 storage.appendFile = fs.appendFile;
 storage.readFile = fs.readFile;
-storage.mkdirp = mkdirp;
+storage.mkdir = function (dir, callback) {
+  fs.mkdir(dir, { recursive: true }, function (err) {
+    if (err && err.code !== 'EEXIST') { return callback(err); }
+    return callback(null);
+  })
+}
 
 
 /**
