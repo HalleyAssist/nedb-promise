@@ -18,7 +18,7 @@ storage.writeFile = fs.writeFile;
 storage.unlink = fs.unlink;
 storage.appendFile = fs.appendFile;
 storage.readFile = fs.readFile;
-storage.mkdir = function (dir, callback) {
+storage.mkdirp = function (dir, callback) {
   fs.mkdir(dir, { recursive: true }, function (err) {
     if (err && err.code !== 'EEXIST') { return callback(err); }
     return callback(null);
